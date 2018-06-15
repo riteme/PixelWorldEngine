@@ -9,12 +9,14 @@ namespace PixelWorldEngine {
 
 	enum class Error {
 		//There are more than one application.
-		MoreThanOneApplication,
+		MoreThanOneInstance,
+		TheDataIsNull,
 		Count
 	};
 
 	static const char* messageTemplate[(int)Error::Count] = {
-		"There are more than one application."
+		"There are more than one instance.",
+		"The data is null."
 	};
 
 	class DebugLayer {

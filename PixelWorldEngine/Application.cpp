@@ -191,7 +191,7 @@ void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine
 
 PixelWorldEngine::Application::Application(const wchar_t* ApplicationName)
 {
-	DebugLayer::Assert(isApplicationCreated, Error::MoreThanOneApplication);
+	DebugLayer::Assert(isApplicationCreated, Error::MoreThanOneInstance);
 
 	applicationName = (wchar_t*)ApplicationName;
 
@@ -269,6 +269,11 @@ void PixelWorldEngine::Application::RunLoop()
 			DispatchMessage(&message);
 		}
 	}
+}
+
+auto PixelWorldEngine::Application::GetGraphicsInstance() -> Graphics::Graphics*
+{
+	return &self->graphics;
 }
 
 

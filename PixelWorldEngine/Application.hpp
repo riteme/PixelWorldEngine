@@ -25,7 +25,7 @@ namespace PixelWorldEngine {
 		int mousePositionX;
 		int mousePositionY;
 
-		Graphics graphics;
+		Graphics::Graphics graphics;
 #ifdef WINDOWS
 		HWND hwnd = nullptr;
 
@@ -47,11 +47,15 @@ namespace PixelWorldEngine {
 
 		void MakeWindow(const wchar_t* WindowName, int Width, int Height, const wchar_t* IconName = L"");
 
+		void MakeSurface();
+
 		void ShowWindow();
 
 		void HideWindow();
 
 		void RunLoop();
+
+		static auto GetGraphicsInstance() -> Graphics::Graphics*;
 	};
 
 }
