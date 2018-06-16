@@ -30,7 +30,15 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 	desc.Usage = D3D11_USAGE::D3D11_USAGE_DEFAULT;
 	desc.Width = width;
 
-	graphics->device->CreateTexture2D(&desc, nullptr, &texture);
+	graphics->device->CreateTexture2D(&desc, nullptr, (ID3D11Texture2D**)&resource);
+
+	D3D11_SHADER_RESOURCE_VIEW_DESC desc;
+	desc.Format = (DXGI_FORMAT)pixelFormat;
+	desc.Texture2D.MipLevels = mipLevels;
+	desc.Texture2D.MostDetailedMip = mipLevels - 1;
+	desc.ViewDimension = D3D11_SRV_DIMENSION::D3D10_1_SRV_DIMENSION_TEXTURE2D;
+
+	graphics->device->CreateShaderResourceView(resource, &desc, &resourceView);
 
 #endif // WINDOWS
 
@@ -39,9 +47,6 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 
 PixelWorldEngine::Graphics::Texture2D::~Texture2D()
 {
-#ifdef WINDOWS
-	Utility::Dipose(texture);
-#endif // WINDOWS
 
 }
 
@@ -49,7 +54,7 @@ void PixelWorldEngine::Graphics::Texture2D::Update(void * data)
 {
 #ifdef WINDOWS
 
-	graphics->deviceContext->UpdateSubresource(texture,
+	graphics->deviceContext->UpdateSubresource(resource,
 		0, nullptr, data, rowPitch, 0);
 
 #endif // WINDOWS
@@ -80,9 +85,11 @@ auto PixelWorldEngine::Graphics::Texture2D::GetPixelFormat() -> PixelFormat
 	return pixelFormat;
 }
 
-auto PixelWorldEngine::Graphics::Texture2D::GetResource() -> void *
+PixelWorldEngine::Graphics::ShaderResource::~ShaderResource()
 {
 #ifdef WINDOWS
-	return texture;
-#endif
+	Utility::Dipose(resource);
+	Utility::Dipose(resourceView);
+#endif // WINDOWS
+
 }

@@ -25,6 +25,9 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Sha
 
 	graphics->device->CreateVertexShader(result->GetBufferPointer(), result->GetBufferSize(),
 		nullptr, &vertexShader);
+
+	for (size_t i = 0; i < result->GetBufferSize(); i++) 
+		compiledPixelShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 	
 	Utility::Dipose(result);
 	Utility::Dipose(error);
@@ -35,6 +38,9 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Sha
 
 	graphics->device->CreatePixelShader(result->GetBufferPointer(), result->GetBufferSize(),
 		nullptr, &pixelShader);
+
+	for (size_t i = 0; i < result->GetBufferSize(); i++)
+		compiledPixelShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 
 	Utility::Dipose(result);
 	Utility::Dipose(error);
@@ -56,6 +62,19 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Ver
 
 #endif // WINDOWS
 
+	compiledVertexShaderCode = std::vector<byte>(VertexShaderCode);
+	compiledPixelShaderCode = std::vector<byte>(PixelShaderCode);
+
+}
+
+auto PixelWorldEngine::Graphics::GraphicsShader::GetVertexShaderCode() -> std::vector<byte>
+{
+	return std::vector<byte>(compiledVertexShaderCode);
+}
+
+auto PixelWorldEngine::Graphics::GraphicsShader::GetPixelShaderCode() -> std::vector<byte>
+{
+	return std::vector<byte>(compiledPixelShaderCode);
 }
 
 PixelWorldEngine::Graphics::GraphicsShader::~GraphicsShader()

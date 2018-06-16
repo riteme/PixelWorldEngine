@@ -25,6 +25,7 @@ namespace PixelWorldEngine {
 			BufferType type;
 
 #ifdef WINDOWS
+		public:
 			D3D11_BUFFER_DESC desc;
 
 			ID3D11Buffer* buffer;
@@ -42,8 +43,6 @@ namespace PixelWorldEngine {
 			auto GetCount() -> int;
 
 			auto GetType()->BufferType;
-
-			auto GetResource() -> void*;
 		};
 	}
 }

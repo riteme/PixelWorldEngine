@@ -10,17 +10,22 @@
 #include "GraphicsShader.hpp"
 #include "BufferResource.hpp"
 #include "ShaderResource.hpp"
+#include "GraphicsRenderTarget.hpp"
 
 namespace PixelWorldEngine {
 
 	namespace Graphics {
 
 		class Graphics {
+		private:
+			int resolutionWidth, resolutionHeight;
 		public:
 
 #ifdef WINDOWS
 			ID3D11Device* device;
 			ID3D11DeviceContext* deviceContext;
+
+			D3D11_INPUT_ELEMENT_DESC elementDesc[3];
 
 			ID3D11InputLayout* inputLayout;
 
@@ -30,18 +35,22 @@ namespace PixelWorldEngine {
 		public:
 			Graphics();
 			
-			void SetVertexBuffer(Buffer buffer);
+			void SetShader(GraphicsShader* shader);
+
+			void SetVertexBuffer(Buffer* buffer);
 			
-			void SetIndexBuffer(Buffer buffer);
+			void SetIndexBuffer(Buffer* buffer);
 
-			void SetConstantBuffer(Buffer buffer, int id);
+			void SetConstantBuffer(Buffer* buffer, int id);
 
-			void SetShader(GraphicsShader shader);
+			void SetShaderResource(ShaderResource* shaderResource, int id);
 
-			void SetVertexShaderResource(ShaderResource shaderResource, int id);
+			void SetConstantBuffers(std::vector<Buffer*> buffer, int startID);
 
-			void SetPixelShaderResource(ShaderResource shaderResource, int id);
+			void SetShaderResources(std::vector<ShaderResource*> shaderResource, int startID);
 
+			void SetRenderTarget(RenderTarget* renderTarget);
+	
 			void DrawIndexed(int indexCount, int startIndexLocation = 0, int baseVertexLocation = 0);
 
 			~Graphics();

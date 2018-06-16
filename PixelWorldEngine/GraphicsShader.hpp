@@ -15,7 +15,11 @@ namespace PixelWorldEngine {
 		private:
 			Graphics* graphics;
 
+			std::vector<byte> compiledVertexShaderCode;
+			std::vector<byte> compiledPixelShaderCode;
+
 #ifdef WINDOWS
+		public:
 			ID3D11VertexShader* vertexShader;
 			ID3D11PixelShader* pixelShader;
 #endif // WINDOWS
@@ -25,6 +29,10 @@ namespace PixelWorldEngine {
 				const char* VertexShaderFunction = "vs_main", const char* PixelShaderFunction = "ps_main");
 
 			GraphicsShader(std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode);
+
+			auto GetVertexShaderCode() -> std::vector<byte>;
+
+			auto GetPixelShaderCode() -> std::vector<byte>;
 
 			~GraphicsShader();
 		};

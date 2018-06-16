@@ -195,6 +195,10 @@ void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine
 
 void PixelWorldEngine::Application::OnUpdate(void * sender)
 {
+	renderTarget->Clear(0, 0, 0);
+
+	graphics.SetRenderTarget(renderTarget);
+
 	swapChain->Present(0, 0);
 }
 
@@ -209,6 +213,14 @@ PixelWorldEngine::Application::Application(const wchar_t* ApplicationName)
 	isApplicationCreated = true;
 
 	self = this;
+}
+
+PixelWorldEngine::Application::~Application()
+{
+	if (renderTarget != nullptr) {
+		delete renderTarget;
+		renderTarget = nullptr;
+	}
 }
 
 void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Width, int Height,const wchar_t* IconName)
@@ -294,6 +306,8 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Wi
 		Utility::Dipose(factory);
 #endif // WINDOWS
 
+		renderTarget = new Graphics::RenderTarget(this);
+
 		isWindowCreated = true;
 
 	}
@@ -343,6 +357,11 @@ auto PixelWorldEngine::Application::GetWindowWidth() -> int
 auto PixelWorldEngine::Application::GetWindowHeight() -> int
 {
 	return windowHeight;
+}
+
+void PixelWorldEngine::Application::SetInstance(Application * application)
+{
+	self = application;
 }
 
 auto PixelWorldEngine::Application::GetGraphicsInstance() -> Graphics::Graphics*

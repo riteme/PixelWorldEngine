@@ -23,15 +23,18 @@ namespace PixelWorldEngine {
 			PixelFormat pixelFormat;
 
 #ifdef WINDOWS
+		public:
 			ID3D11RenderTargetView* renderTarget;
 #endif // WINDOWS
 
 		public:
-			RenderTarget(Texture2D texture);
+			RenderTarget(Texture2D* texture);
 
-			RenderTarget(Application application);
+			RenderTarget(Application* application);
 
 			~RenderTarget();
+
+			void Clear(float red, float green, float blue, float alpha = 1);
 
 			auto GetWidth() -> int;
 

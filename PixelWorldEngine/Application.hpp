@@ -7,6 +7,7 @@
 #include "Events.hpp"
 
 #include "Graphics.hpp"
+#include "GraphicsRenderTarget.hpp"
 
 namespace PixelWorldEngine {
 
@@ -26,6 +27,7 @@ namespace PixelWorldEngine {
 		int mousePositionY;
 
 		Graphics::Graphics graphics;
+		Graphics::RenderTarget* renderTarget;
 
 #ifdef WINDOWS
 		HWND hwnd = nullptr;
@@ -59,6 +61,8 @@ namespace PixelWorldEngine {
 	public:
 		Application(const wchar_t* ApplicationName);
 
+		~Application();
+
 		void MakeWindow(const wchar_t* WindowName, int Width, int Height, const wchar_t* IconName = L"");
 
 		void ShowWindow();
@@ -70,6 +74,8 @@ namespace PixelWorldEngine {
 		auto GetWindowWidth() -> int;
 
 		auto GetWindowHeight() -> int;
+
+		static void SetInstance(Application* application);
 
 		static auto GetGraphicsInstance() -> Graphics::Graphics*;
 	};

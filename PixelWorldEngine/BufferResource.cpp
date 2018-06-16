@@ -57,12 +57,5 @@ auto PixelWorldEngine::Graphics::Buffer::GetType() -> BufferType
 	return type;
 }
 
-auto PixelWorldEngine::Graphics::Buffer::GetResource() -> void *
-{
-#ifdef WINDOWS
-	return buffer;
-#endif
-}
-
 
 

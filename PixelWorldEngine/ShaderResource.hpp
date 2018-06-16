@@ -13,11 +13,17 @@ namespace PixelWorldEngine {
 		class Graphics;
 
 		class ShaderResource {
+#ifdef WINDOWS
 		public:
-			virtual auto GetResource() -> void* { return nullptr; };
+			ID3D11Resource* resource;
+			ID3D11ShaderResourceView* resourceView;
+#endif // WINDOWS
+		public:
+			~ShaderResource();
+
 		};
 
-		class Texture2D :ShaderResource {
+		class Texture2D :public ShaderResource {
 		protected:
 			Graphics* graphics;
 
@@ -30,9 +36,8 @@ namespace PixelWorldEngine {
 			PixelFormat pixelFormat;
 
 #ifdef WINDOWS
+		public:
 			D3D11_TEXTURE2D_DESC desc;
-
-			ID3D11Texture2D* texture;
 #endif // WINDOWS
 
 		public:
@@ -51,8 +56,6 @@ namespace PixelWorldEngine {
 			auto GetMipLevels() -> int;
 
 			auto GetPixelFormat()->PixelFormat;
-
-			auto GetResource() -> void* override;
 		};
 	}
 }

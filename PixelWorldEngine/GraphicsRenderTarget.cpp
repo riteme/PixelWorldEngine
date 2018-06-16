@@ -3,14 +3,14 @@
 #include "Graphics.hpp"
 #include "Application.hpp"
 
-PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Texture2D texture)
+PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Texture2D* texture)
 {
 	graphics = Application::GetGraphicsInstance();
 
-	width = texture.GetWidth();
-	height = texture.GetHeight();
+	width = texture->GetWidth();
+	height = texture->GetHeight();
 
-	pixelFormat = texture.GetPixelFormat();
+	pixelFormat = texture->GetPixelFormat();
 
 #ifdef WINDOWS
 
@@ -20,19 +20,19 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Texture2D texture)
 	viewDesc.Texture2D.MipSlice = 0;
 	viewDesc.ViewDimension = D3D11_RTV_DIMENSION::D3D11_RTV_DIMENSION_TEXTURE2D;
 
-	graphics->device->CreateRenderTargetView((ID3D11Resource*)texture.GetResource(),
+	graphics->device->CreateRenderTargetView(texture->resource,
 		&viewDesc, &renderTarget);
 
 #endif // WINDOWS
 
 }
 
-PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Application application)
+PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Application* application)
 {
 	graphics = Application::GetGraphicsInstance();
 
-	width = application.GetWindowWidth();
-	height = application.GetWindowHeight();
+	width = application->GetWindowWidth();
+	height = application->GetWindowHeight();
 
 	pixelFormat = PixelFormat::R8G8B8A8;
 
@@ -40,7 +40,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Application application)
 
 	ID3D11Texture2D* backBuffer = nullptr;
 
-	application.swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
+	application->swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
 
 	graphics->device->CreateRenderTargetView(backBuffer, nullptr, &renderTarget);
 
@@ -54,6 +54,13 @@ PixelWorldEngine::Graphics::RenderTarget::~RenderTarget()
 #ifdef WINDOWS
 	Utility::Dipose(renderTarget);
 #endif // WINDOWS
+}
+
+void PixelWorldEngine::Graphics::RenderTarget::Clear(float red, float green, float blue, float alpha)
+{
+	float color[4] = { red,green,blue,alpha };
+
+	graphics->deviceContext->ClearRenderTargetView(renderTarget, color);
 }
 
 auto PixelWorldEngine::Graphics::RenderTarget::GetWidth() -> int
