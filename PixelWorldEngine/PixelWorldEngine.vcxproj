@@ -26,6 +26,7 @@
     <ClInclude Include="GraphicsEnum.hpp" />
     <ClInclude Include="Events.hpp" />
     <ClInclude Include="Graphics.hpp" />
+    <ClInclude Include="GraphicsRenderTarget.hpp" />
     <ClInclude Include="KeyCode.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="GraphicsShader.hpp" />
@@ -38,6 +39,7 @@
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Events.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GraphicsRenderTarget.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="ShaderResource.cpp" />
     <ClCompile Include="Utility.cpp" />

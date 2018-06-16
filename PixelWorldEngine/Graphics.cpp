@@ -1,11 +1,8 @@
 #include "Graphics.hpp"
 
-#if WINDOWS
-#endif // WINDOWS
-
 PixelWorldEngine::Graphics::Graphics::Graphics()
 {
-#if WINDOWS
+#ifdef WINDOWS
 
 	D3D_FEATURE_LEVEL features[4] = {
 		D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_1,
@@ -14,7 +11,7 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 		D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_10_0
 	};
 
-#if DEBUG
+#ifdef DEBUG
 	auto createFlag = D3D11_CREATE_DEVICE_FLAG::D3D11_CREATE_DEVICE_DEBUG;
 #else
 	auto createFlag = 0;
@@ -28,7 +25,7 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 
 PixelWorldEngine::Graphics::Graphics::~Graphics()
 {
-#if WINDOWS
+#ifdef WINDOWS
 	Utility::Dipose(device);
 	Utility::Dipose(deviceContext);
 #endif // WINDOWS

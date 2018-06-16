@@ -1,12 +1,12 @@
 #include "pch.hpp"
 
+#ifndef _APPLICATION_H_
+#define _APPLICATION_H_
+
 #include "KeyCode.hpp"
 #include "Events.hpp"
 
 #include "Graphics.hpp"
-
-#ifndef _APPLICATION_H_
-#define _APPLICATION_H_
 
 namespace PixelWorldEngine {
 
@@ -26,12 +26,24 @@ namespace PixelWorldEngine {
 		int mousePositionY;
 
 		Graphics::Graphics graphics;
+
 #ifdef WINDOWS
 		HWND hwnd = nullptr;
 
 		static LRESULT CALLBACK DefaultWindowProc(HWND hWnd, UINT message,
 			WPARAM wParam, LPARAM lParam);
-#endif // _WINDOWS_
+#endif // WINDOWS
+
+	public:
+
+#ifdef WINDOWS
+
+		IDXGISwapChain* swapChain;
+
+		DXGI_SWAP_CHAIN_DESC swapDesc;
+
+#endif //WINDOWS
+
 	private:
 		void OnMouseMove(void* sender, PixelWorldEngine::Events::MouseMoveEvent* eventArg);
 
@@ -42,18 +54,22 @@ namespace PixelWorldEngine {
 		void OnKeyClick(void* sender, PixelWorldEngine::Events::KeyClickEvent* eventArg);
 
 		void OnSizeChange(void* sender, PixelWorldEngine::Events::SizeChangeEvent* eventArg);
+
+		void OnUpdate(void* sender);
 	public:
 		Application(const wchar_t* ApplicationName);
 
 		void MakeWindow(const wchar_t* WindowName, int Width, int Height, const wchar_t* IconName = L"");
-
-		void MakeSurface();
 
 		void ShowWindow();
 
 		void HideWindow();
 
 		void RunLoop();
+
+		auto GetWindowWidth() -> int;
+
+		auto GetWindowHeight() -> int;
 
 		static auto GetGraphicsInstance() -> Graphics::Graphics*;
 	};

@@ -1,19 +1,21 @@
 #include "pch.hpp"
 
-#include "Graphics.hpp"
-
 #ifndef _GRAPHICSSHADER_H_
 #define _GRAPHICSSHADER_H_
+
+#include "BaseStruct.hpp"
 
 namespace PixelWorldEngine {
 
 	namespace Graphics {
 
+		class Graphics;
+
 		class GraphicsShader {
 		private:
 			Graphics* graphics;
 
-#if WINDOWS
+#ifdef WINDOWS
 			ID3D11VertexShader* vertexShader;
 			ID3D11PixelShader* pixelShader;
 #endif // WINDOWS

@@ -9,7 +9,9 @@
 
 static bool isApplicationCreated = false;
 
-static PixelWorldEngine::Application* self = nullptr;
+PixelWorldEngine::Application* self = nullptr;
+
+#ifdef WINDOWS
 
 LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -17,7 +19,7 @@ LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message
 	{
 	case WM_MOUSEMOVE: {
 		auto eventArg = &Events::MouseMoveEvent();
-		
+
 		eventArg->x = LOWORD(lParam);
 		eventArg->y = HIWORD(lParam);
 
@@ -134,13 +136,13 @@ LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message
 		eventArg->offset = HIWORD(wParam);
 
 		self->OnMouseWheel(self, eventArg);
-		
+
 		break;
 	}
 
 	case WM_SIZE: {
 		auto eventArg = &Events::SizeChangeEvent();
-	
+
 		eventArg->lastWidth = self->windowWidth;
 		eventArg->lastHeight = self->windowHeight;
 		eventArg->nowWidth = LOWORD(lParam);
@@ -161,6 +163,8 @@ LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message
 
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
+
+#endif // WINDOWS
 
 void PixelWorldEngine::Application::OnMouseMove(void * sender, PixelWorldEngine::Events::MouseMoveEvent * eventArg)
 {
@@ -189,6 +193,11 @@ void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine
 	windowHeight = eventArg->nowHeight;
 }
 
+void PixelWorldEngine::Application::OnUpdate(void * sender)
+{
+	swapChain->Present(0, 0);
+}
+
 PixelWorldEngine::Application::Application(const wchar_t* ApplicationName)
 {
 	DebugLayer::Assert(isApplicationCreated, Error::MoreThanOneInstance);
@@ -210,11 +219,20 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Wi
 	iconName = (wchar_t*)IconName;
 
 	if (isWindowCreated == true) {
+
+#ifdef WINDOWS
+
 		SetWindowText(hwnd, &windowName[0]);
 		SetWindowPos(hwnd, nullptr, 0, 0, windowWidth, windowHeight,
 			SWP_NOZORDER ^ SWP_NOMOVE);
+
+#endif // WINDOWS
+
 	}
 	else {
+
+#ifdef WINDOWS
+
 		auto hInstance = GetModuleHandle(0);
 
 		WNDCLASS appInfo;
@@ -245,22 +263,64 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Wi
 			WS_SIZEBOX ^ WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT,
 			rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInstance, nullptr);
 
+		swapDesc.BufferCount = 1;
+		swapDesc.BufferDesc.Format = (DXGI_FORMAT)Graphics::PixelFormat::R8G8B8A8;
+		swapDesc.BufferDesc.Height = windowHeight;
+		swapDesc.BufferDesc.RefreshRate.Denominator = 1;
+		swapDesc.BufferDesc.RefreshRate.Numerator = 60;
+		swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
+		swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		swapDesc.BufferDesc.Width = windowWidth;
+		swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		swapDesc.OutputWindow = hwnd;
+		swapDesc.SampleDesc.Count = 1;
+		swapDesc.SampleDesc.Quality = 0;
+		swapDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_DISCARD;
+		swapDesc.Windowed = true;
+
+		IDXGIDevice* device = nullptr;
+		IDXGIAdapter* adapter = nullptr;
+		IDXGIFactory* factory = nullptr;
+
+		graphics.device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&device));
+		device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&adapter));
+		adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&factory));
+
+		factory->CreateSwapChain(graphics.device, &swapDesc, &swapChain);
+
+		Utility::Dipose(device);
+		Utility::Dipose(adapter);
+		Utility::Dipose(factory);
+#endif // WINDOWS
+
 		isWindowCreated = true;
+
 	}
 }
 
 void PixelWorldEngine::Application::ShowWindow()
 {
+#ifdef WINDOWS
+
 	::ShowWindow(hwnd, SW_SHOW);
+
+#endif // WINDOWS
 }
 
 void PixelWorldEngine::Application::HideWindow() 
 {
+#ifdef WINDOWS
+
 	::ShowWindow(hwnd, SW_HIDE);
+
+#endif // WINDOWS
 }
 
 void PixelWorldEngine::Application::RunLoop()
 {
+#ifdef WINDOWS
+
 	MSG message = { 0 };
 
 	while (message.message != WM_QUIT) {
@@ -268,7 +328,21 @@ void PixelWorldEngine::Application::RunLoop()
 			TranslateMessage(&message);
 			DispatchMessage(&message);
 		}
+
+		OnUpdate(this);
 	}
+
+#endif // WINDOWS
+}
+
+auto PixelWorldEngine::Application::GetWindowWidth() -> int
+{
+	return windowWidth;
+}
+
+auto PixelWorldEngine::Application::GetWindowHeight() -> int
+{
+	return windowHeight;
 }
 
 auto PixelWorldEngine::Application::GetGraphicsInstance() -> Graphics::Graphics*

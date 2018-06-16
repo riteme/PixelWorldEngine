@@ -1,13 +1,13 @@
 #include "pch.hpp"
 
-#include "Graphics.hpp"
-
 #ifndef _BUFFERRESOURCE_H_
 #define _BUFFERRESOURCE_H_
 
 namespace PixelWorldEngine {
 
 	namespace Graphics {
+
+		class Graphics;
 
 		enum class BufferType {
 			VertexBuffer = 1,
@@ -17,13 +17,14 @@ namespace PixelWorldEngine {
 
 		class Buffer {
 		private:
-			Graphics * graphics;
+			Graphics* graphics;
 
 			int size;
 			int count;
 
 			BufferType type;
-#if WINDOWS
+
+#ifdef WINDOWS
 			D3D11_BUFFER_DESC desc;
 
 			ID3D11Buffer* buffer;

@@ -11,6 +11,8 @@ namespace PixelWorldEngine {
 		float u1, v1;
 	};
 
+	typedef unsigned char byte;
+
 }
 
 #endif // !_BASESTRUCT_H_

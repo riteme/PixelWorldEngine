@@ -10,5 +10,4 @@ int main() {
 	app.ShowWindow();
 
 	app.RunLoop();
-
 }

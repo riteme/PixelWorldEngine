@@ -1,6 +1,7 @@
 #include "BufferResource.hpp"
 
 #include "Application.hpp"
+#include "Graphics.hpp"
 
 PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCount, BufferType bufferType)
 {
@@ -10,7 +11,7 @@ PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCo
 	count = dataCount;
 	type = bufferType;
 
-#if WINDOWS
+#ifdef WINDOWS
 
 	
 	desc.BindFlags = (D3D11_BIND_FLAG)type;
@@ -29,7 +30,7 @@ PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCo
 
 PixelWorldEngine::Graphics::Buffer::~Buffer() 
 {
-#if WINDOWS
+#ifdef WINDOWS
 	Utility::Dipose(buffer);
 #endif // WINDOWS
 
@@ -58,7 +59,7 @@ auto PixelWorldEngine::Graphics::Buffer::GetType() -> BufferType
 
 auto PixelWorldEngine::Graphics::Buffer::GetResource() -> void *
 {
-#if WINDOWS
+#ifdef WINDOWS
 	return buffer;
 #endif
 }

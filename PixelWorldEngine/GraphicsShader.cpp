@@ -1,17 +1,19 @@
 #include "GraphicsShader.hpp"
+
 #include "Application.hpp"
+#include "Graphics.hpp"
 
 PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> ShaderCode,
 	const char * VertexShaderFunction, const char * PixelShaderFunction)
 {
 	graphics = Application::GetGraphicsInstance();
 	
-#if WINDOWS
+#ifdef WINDOWS
 
 	ID3DBlob* result;
 	ID3DBlob* error;
 
-#if DEBUG
+#ifdef DEBUG
 	UINT flag = D3DCOMPILE_DEBUG;
 #else
 	UINT flag = D3DCOMPILE_OPTIMIZATION_LEVEL2;
@@ -44,7 +46,7 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Ver
 {
 	graphics = Application::GetGraphicsInstance();
 
-#if WINDOWS
+#ifdef WINDOWS
 
 	graphics->device->CreateVertexShader(&VertexShaderCode[0], VertexShaderCode.size(),
 		nullptr, &vertexShader);
@@ -58,7 +60,7 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Ver
 
 PixelWorldEngine::Graphics::GraphicsShader::~GraphicsShader()
 {
-#if WINDOWS
+#ifdef WINDOWS
 	Utility::Dipose(vertexShader);
 	Utility::Dipose(pixelShader);
 #endif // WINDOWS

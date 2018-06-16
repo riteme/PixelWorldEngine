@@ -1,6 +1,7 @@
 #include "ShaderResource.hpp"
 
 #include "Application.hpp"
+#include "Graphics.hpp"
 
 PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Height, PixelFormat PixelFormat, int MipLevels)
 {
@@ -15,7 +16,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 	rowPitch = width * Utility::CountPixelFormatSize(pixelFormat);
 	size = rowPitch * height;
 
-#if WINDOWS
+#ifdef WINDOWS
 
 	desc.ArraySize = 1;
 	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
@@ -38,7 +39,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 
 PixelWorldEngine::Graphics::Texture2D::~Texture2D()
 {
-#if WINDOWS
+#ifdef WINDOWS
 	Utility::Dipose(texture);
 #endif // WINDOWS
 
@@ -46,7 +47,7 @@ PixelWorldEngine::Graphics::Texture2D::~Texture2D()
 
 void PixelWorldEngine::Graphics::Texture2D::Update(void * data)
 {
-#if WINDOWS
+#ifdef WINDOWS
 
 	graphics->deviceContext->UpdateSubresource(texture,
 		0, nullptr, data, rowPitch, 0);
@@ -81,7 +82,7 @@ auto PixelWorldEngine::Graphics::Texture2D::GetPixelFormat() -> PixelFormat
 
 auto PixelWorldEngine::Graphics::Texture2D::GetResource() -> void *
 {
-#if WINDOWS
+#ifdef WINDOWS
 	return texture;
 #endif
 }

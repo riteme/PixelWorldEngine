@@ -1,20 +1,25 @@
 #include "pch.hpp"
 
-
-#include "Utility.hpp"
-#include "Graphics.hpp"
-#include "GraphicsEnum.hpp"
-
 #ifndef _SHADERRESOURCE_H_
 #define _SHADERRESOURCE_H_
+
+#include "Utility.hpp"
+#include "GraphicsEnum.hpp"
 
 namespace PixelWorldEngine {
 
 	namespace Graphics {
 
-		class Texture2D {
-		private:
-			Graphics * graphics;
+		class Graphics;
+
+		class ShaderResource {
+		public:
+			virtual auto GetResource() -> void* { return nullptr; };
+		};
+
+		class Texture2D :ShaderResource {
+		protected:
+			Graphics* graphics;
 
 			int width, height;
 
@@ -24,7 +29,7 @@ namespace PixelWorldEngine {
 
 			PixelFormat pixelFormat;
 
-#if WINDOWS
+#ifdef WINDOWS
 			D3D11_TEXTURE2D_DESC desc;
 
 			ID3D11Texture2D* texture;
@@ -47,7 +52,7 @@ namespace PixelWorldEngine {
 
 			auto GetPixelFormat()->PixelFormat;
 
-			auto GetResource() -> void*;
+			auto GetResource() -> void* override;
 		};
 	}
 }
