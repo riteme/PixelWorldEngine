@@ -26,7 +26,7 @@ namespace PixelWorldEngine {
 		int mousePositionX;
 		int mousePositionY;
 
-		Graphics::Graphics graphics;
+		Graphics::Graphics* graphics;
 		Graphics::RenderTarget* renderTarget;
 
 #ifdef WINDOWS
@@ -39,10 +39,10 @@ namespace PixelWorldEngine {
 	public:
 
 #ifdef WINDOWS
+		DXGI_SWAP_CHAIN_DESC swapDesc;
 
 		IDXGISwapChain* swapChain;
 
-		DXGI_SWAP_CHAIN_DESC swapDesc;
 
 #endif //WINDOWS
 

@@ -1,17 +1,14 @@
 #include "Application.hpp"
 #include "DebugLayer.hpp"
 
-#pragma comment(lib,"Imm32.lib")
+static bool isApplicationCreated = false;
+
+static PixelWorldEngine::Application* self = nullptr;
+
+#ifdef WINDOWS
 
 #define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEYUP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
-
-
-static bool isApplicationCreated = false;
-
-PixelWorldEngine::Application* self = nullptr;
-
-#ifdef WINDOWS
 
 LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -197,9 +194,14 @@ void PixelWorldEngine::Application::OnUpdate(void * sender)
 {
 	renderTarget->Clear(0, 0, 0);
 
-	graphics.SetRenderTarget(renderTarget);
+	graphics->SetRenderTarget(renderTarget);
+
+#ifdef WINDOWS
 
 	swapChain->Present(0, 0);
+
+#endif // WINDOWS
+
 }
 
 PixelWorldEngine::Application::Application(const wchar_t* ApplicationName)
@@ -221,6 +223,11 @@ PixelWorldEngine::Application::~Application()
 		delete renderTarget;
 		renderTarget = nullptr;
 	}
+
+	if (graphics != nullptr) {
+		delete graphics;
+		graphics = nullptr;
+	}
 }
 
 void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Width, int Height,const wchar_t* IconName)
@@ -229,6 +236,8 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Wi
 	windowWidth = Width;
 	windowHeight = Height;
 	iconName = (wchar_t*)IconName;
+
+	graphics = new Graphics::Graphics();
 
 	if (isWindowCreated == true) {
 
@@ -275,31 +284,35 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t* WindowName, int Wi
 			WS_SIZEBOX ^ WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT,
 			rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInstance, nullptr);
 
-		swapDesc.BufferCount = 1;
-		swapDesc.BufferDesc.Format = (DXGI_FORMAT)Graphics::PixelFormat::R8G8B8A8;
-		swapDesc.BufferDesc.Height = windowHeight;
-		swapDesc.BufferDesc.RefreshRate.Denominator = 1;
-		swapDesc.BufferDesc.RefreshRate.Numerator = 60;
-		swapDesc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
-		swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
-		swapDesc.BufferDesc.Width = windowWidth;
-		swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
-		swapDesc.OutputWindow = hwnd;
-		swapDesc.SampleDesc.Count = 1;
-		swapDesc.SampleDesc.Quality = 0;
-		swapDesc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_DISCARD;
-		swapDesc.Windowed = true;
+		DXGI_SWAP_CHAIN_DESC desc = { 0 };
+
+		desc.BufferCount = 1;
+		desc.BufferDesc.Format = (DXGI_FORMAT)Graphics::PixelFormat::R8G8B8A8;
+		desc.BufferDesc.Height = windowHeight;
+		desc.BufferDesc.RefreshRate.Denominator = 1;
+		desc.BufferDesc.RefreshRate.Numerator = 60;
+		desc.BufferDesc.Scaling = DXGI_MODE_SCALING::DXGI_MODE_SCALING_UNSPECIFIED;
+		desc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
+		desc.BufferDesc.Width = windowWidth;
+		desc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
+		desc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		desc.OutputWindow = hwnd;
+		desc.SampleDesc.Count = 1;
+		desc.SampleDesc.Quality = 0;
+		desc.SwapEffect = DXGI_SWAP_EFFECT::DXGI_SWAP_EFFECT_DISCARD;
+		desc.Windowed = true;
+
+		//swapDesc = desc;
 
 		IDXGIDevice* device = nullptr;
 		IDXGIAdapter* adapter = nullptr;
 		IDXGIFactory* factory = nullptr;
 
-		graphics.device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&device));
+		graphics->device->QueryInterface(__uuidof(IDXGIDevice), reinterpret_cast<void**>(&device));
 		device->GetParent(__uuidof(IDXGIAdapter), reinterpret_cast<void**>(&adapter));
 		adapter->GetParent(__uuidof(IDXGIFactory), reinterpret_cast<void**>(&factory));
 
-		factory->CreateSwapChain(graphics.device, &swapDesc, &swapChain);
+		factory->CreateSwapChain(graphics->device, &desc, &swapChain);
 
 		Utility::Dipose(device);
 		Utility::Dipose(adapter);
@@ -366,7 +379,7 @@ void PixelWorldEngine::Application::SetInstance(Application * application)
 
 auto PixelWorldEngine::Application::GetGraphicsInstance() -> Graphics::Graphics*
 {
-	return &self->graphics;
+	return self->graphics;
 }
 
 

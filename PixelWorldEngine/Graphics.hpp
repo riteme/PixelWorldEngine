@@ -16,6 +16,11 @@ namespace PixelWorldEngine {
 
 	namespace Graphics {
 
+		enum class FillMode {
+			FillWireFrame = 2,
+			FillSolid = 3
+		};
+
 		class Graphics {
 		private:
 			int resolutionWidth, resolutionHeight;
@@ -26,8 +31,13 @@ namespace PixelWorldEngine {
 			ID3D11DeviceContext* deviceContext;
 
 			D3D11_INPUT_ELEMENT_DESC elementDesc[3];
-
 			ID3D11InputLayout* inputLayout;
+
+			D3D11_RASTERIZER_DESC rasterizerDesc;
+			ID3D11RasterizerState* rasterizerState;
+
+			D3D11_BLEND_DESC blendDesc;
+			ID3D11BlendState* blendState;
 
 			D3D_FEATURE_LEVEL feature;
 #endif // WINDOWS
@@ -51,6 +61,12 @@ namespace PixelWorldEngine {
 
 			void SetRenderTarget(RenderTarget* renderTarget);
 	
+			void SetFillMode(FillMode fillMode);
+
+			//是否启用混合来实现不透明度，大致是对于绘制的物体，其混合时的方程为 Src * Src.a + Dst * (1 - Src.a)
+			//其中Src表示我们渲染出来的像素，Dst表示在后台缓冲中的像素。
+			void SetBlendState(bool state);
+
 			void DrawIndexed(int indexCount, int startIndexLocation = 0, int baseVertexLocation = 0);
 
 			~Graphics();
