@@ -3,9 +3,9 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCount, BufferType bufferType)
+PixelWorldEngine::Graphics::Buffer::Buffer(Graphics* Graphics, void * data, int dataSize, int dataCount, BufferType bufferType)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	size = dataSize;
 	count = dataCount;

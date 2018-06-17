@@ -74,10 +74,6 @@ namespace PixelWorldEngine {
 		auto GetWindowWidth() -> int;
 
 		auto GetWindowHeight() -> int;
-
-		static void SetInstance(Application* application);
-
-		static auto GetGraphicsInstance() -> Graphics::Graphics*;
 	};
 
 }

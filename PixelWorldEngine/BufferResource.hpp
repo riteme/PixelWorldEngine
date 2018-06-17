@@ -32,7 +32,7 @@ namespace PixelWorldEngine {
 #endif // WINDOWS
 
 		public:
-			Buffer(void* data, int dataSize, int dataCount = 1, BufferType bufferType = BufferType::ConstantBuffer);
+			Buffer(Graphics* graphics, void* data, int dataSize, int dataCount = 1, BufferType bufferType = BufferType::ConstantBuffer);
 			
 			~Buffer();
 

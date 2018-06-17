@@ -3,9 +3,9 @@
 #include "Graphics.hpp"
 #include "Application.hpp"
 
-PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Texture2D* texture)
+PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics,Texture2D* texture)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	width = texture->GetWidth();
 	height = texture->GetHeight();
@@ -27,9 +27,9 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Texture2D* texture)
 
 }
 
-PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Application* application)
+PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Application* application)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	width = application->GetWindowWidth();
 	height = application->GetWindowHeight();

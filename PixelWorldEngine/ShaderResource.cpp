@@ -3,9 +3,9 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Height, PixelFormat PixelFormat, int MipLevels)
+PixelWorldEngine::Graphics::Texture2D::Texture2D(Graphics* Graphics, void * Data, int Width, int Height, PixelFormat PixelFormat, int MipLevels)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	width = Width;
 	height = Height;

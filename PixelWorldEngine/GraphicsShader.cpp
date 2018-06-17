@@ -3,10 +3,10 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> ShaderCode,
+PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> ShaderCode,
 	const char * VertexShaderFunction, const char * PixelShaderFunction)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 	
 #ifdef WINDOWS
 
@@ -48,9 +48,9 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Sha
 #endif // WINDOWS
 }
 
-PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode)
+PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 #ifdef WINDOWS
 

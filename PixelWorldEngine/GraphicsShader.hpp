@@ -25,10 +25,10 @@ namespace PixelWorldEngine {
 #endif // WINDOWS
 
 		public:
-			GraphicsShader(std::vector<byte> ShaderCode,
+			GraphicsShader(Graphics* graphics, std::vector<byte> ShaderCode,
 				const char* VertexShaderFunction = "vs_main", const char* PixelShaderFunction = "ps_main");
 
-			GraphicsShader(std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode);
+			GraphicsShader(Graphics* graphics, std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode);
 
 			auto GetVertexShaderCode() -> std::vector<byte>;
 

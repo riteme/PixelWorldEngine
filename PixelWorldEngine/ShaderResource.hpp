@@ -41,7 +41,7 @@ namespace PixelWorldEngine {
 #endif // WINDOWS
 
 		public:
-			Texture2D(void* Data, int Width, int Height, PixelFormat PixelFormat = PixelFormat::Unknown, int MipLevels = 1);
+			Texture2D(Graphics* graphics, void* Data, int Width, int Height, PixelFormat PixelFormat = PixelFormat::Unknown, int MipLevels = 1);
 
 			~Texture2D();
 

@@ -28,9 +28,9 @@ namespace PixelWorldEngine {
 #endif // WINDOWS
 
 		public:
-			RenderTarget(Texture2D* texture);
+			RenderTarget(Graphics* graphics, Texture2D* texture);
 
-			RenderTarget(Application* application);
+			RenderTarget(Graphics* graphics, Application* application);
 
 			~RenderTarget();
 
