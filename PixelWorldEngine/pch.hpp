@@ -9,7 +9,7 @@ namespace PixelWorldEngine {
 	typedef unsigned char byte;
 
 }
-#ifdef WINDOWS
+#ifdef _WIN32
 
 #include <Windows.h>
 #include <windowsx.h>
@@ -21,7 +21,7 @@ namespace PixelWorldEngine {
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib,"Imm32.lib")
 
-#endif // _WINDOWS_
+#endif // _WIN32
 
 #ifdef DEBUG
 #endif

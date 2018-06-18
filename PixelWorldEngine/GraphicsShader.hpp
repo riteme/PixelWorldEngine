@@ -17,11 +17,11 @@ namespace PixelWorldEngine {
 			std::vector<byte> compiledVertexShaderCode;
 			std::vector<byte> compiledPixelShaderCode;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			ID3D11VertexShader* vertexShader;
 			ID3D11PixelShader* pixelShader;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
 			GraphicsShader(Graphics* graphics, std::vector<byte> ShaderCode,

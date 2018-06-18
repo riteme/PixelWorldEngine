@@ -16,7 +16,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(Graphics* Graphics, void * Data
 	rowPitch = width * Utility::CountPixelFormatSize(pixelFormat);
 	size = rowPitch * height;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	desc.ArraySize = 1;
 	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
@@ -40,7 +40,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(Graphics* Graphics, void * Data
 
 	graphics->device->CreateShaderResourceView(resource, &desc, &resourceView);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 	Update(Data);
 }
@@ -54,12 +54,12 @@ void PixelWorldEngine::Graphics::Texture2D::Update(void * data)
 {
 	if (data == nullptr) return;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	graphics->deviceContext->UpdateSubresource(resource,
 		0, nullptr, data, rowPitch, 0);
 
-#endif // WINDOWS
+#endif // _WIN32
 }
 
 auto PixelWorldEngine::Graphics::Texture2D::GetWidth() -> int
@@ -89,9 +89,9 @@ auto PixelWorldEngine::Graphics::Texture2D::GetPixelFormat() -> PixelFormat
 
 PixelWorldEngine::Graphics::ShaderResource::~ShaderResource()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(resource);
 	Utility::Dipose(resourceView);
-#endif // WINDOWS
+#endif // _WIN32
 
 }

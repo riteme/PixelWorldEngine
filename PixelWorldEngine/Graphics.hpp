@@ -25,7 +25,7 @@ namespace PixelWorldEngine {
 			int resolutionWidth, resolutionHeight;
 		public:
 
-#ifdef WINDOWS
+#ifdef _WIN32
 			ID3D11Device* device;
 			ID3D11DeviceContext* deviceContext;
 
@@ -39,7 +39,7 @@ namespace PixelWorldEngine {
 			ID3D11BlendState* blendState;
 
 			D3D_FEATURE_LEVEL feature;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
 			Graphics();

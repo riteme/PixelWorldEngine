@@ -21,10 +21,10 @@ namespace PixelWorldEngine {
 
 			PixelFormat pixelFormat;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			ID3D11RenderTargetView* renderTarget;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
 			RenderTarget(Graphics* graphics, Texture2D* texture);

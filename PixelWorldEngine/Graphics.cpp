@@ -2,7 +2,7 @@
 
 PixelWorldEngine::Graphics::Graphics::Graphics()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	D3D_FEATURE_LEVEL features[4] = {
 		D3D_FEATURE_LEVEL::D3D_FEATURE_LEVEL_11_1,
@@ -45,13 +45,13 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 
-#endif // WINDOWS
+#endif // _WIN32
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetShader(GraphicsShader* shader)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	auto vertexShaderCode = shader->GetVertexShaderCode();
 
@@ -60,42 +60,42 @@ void PixelWorldEngine::Graphics::Graphics::SetShader(GraphicsShader* shader)
 	deviceContext->VSSetShader(shader->vertexShader, nullptr, 0);
 	deviceContext->PSSetShader(shader->pixelShader, nullptr, 0);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetVertexBuffer(Buffer* buffer)
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	
 	UINT size = buffer->GetSize() / buffer->GetCount();
 
 	deviceContext->IASetVertexBuffers(0, 1, &buffer->buffer, &size, nullptr);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetIndexBuffer(Buffer* buffer)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	deviceContext->IASetIndexBuffer(buffer->buffer, DXGI_FORMAT::DXGI_FORMAT_R32_UINT, 0);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetConstantBuffer(Buffer* buffer, int id)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	deviceContext->VSSetConstantBuffers(id, 1, &buffer->buffer);
 	deviceContext->PSSetConstantBuffers(id, 1, &buffer->buffer);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 
 }
@@ -103,19 +103,19 @@ void PixelWorldEngine::Graphics::Graphics::SetConstantBuffer(Buffer* buffer, int
 void PixelWorldEngine::Graphics::Graphics::SetShaderResource(ShaderResource* shaderResource, int id)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	deviceContext->VSSetShaderResources(id, 1, &shaderResource->resourceView);
 	deviceContext->PSSetShaderResources(id, 1, &shaderResource->resourceView);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetConstantBuffers(std::vector<Buffer*> buffer, int startID)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	std::vector<ID3D11Buffer*> buffers(buffer.size());
 
@@ -125,7 +125,7 @@ void PixelWorldEngine::Graphics::Graphics::SetConstantBuffers(std::vector<Buffer
 	deviceContext->VSSetConstantBuffers(startID, buffer.size(), &buffers[0]);
 	deviceContext->PSSetConstantBuffers(startID, buffer.size(), &buffers[0]);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 
 }
@@ -133,7 +133,7 @@ void PixelWorldEngine::Graphics::Graphics::SetConstantBuffers(std::vector<Buffer
 void PixelWorldEngine::Graphics::Graphics::SetShaderResources(std::vector<ShaderResource*> shaderResource, int startID)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	std::vector<ID3D11ShaderResourceView*> resourceViews(shaderResource.size());
 
@@ -143,25 +143,25 @@ void PixelWorldEngine::Graphics::Graphics::SetShaderResources(std::vector<Shader
 	deviceContext->VSSetShaderResources(startID, shaderResource.size(), &resourceViews[0]);
 	deviceContext->PSSetShaderResources(startID, shaderResource.size(), &resourceViews[0]);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetRenderTarget(RenderTarget* renderTarget)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	deviceContext->OMSetRenderTargets(1, &renderTarget->renderTarget, nullptr);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode fillMode)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(rasterizerState);
 
 	rasterizerDesc.FillMode = (D3D11_FILL_MODE)fillMode;
@@ -169,14 +169,14 @@ void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode fillMode)
 	device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
 	deviceContext->RSSetState(rasterizerState);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::SetBlendState(bool state)
 {
 	
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	Utility::Dipose(blendState);
 
@@ -186,27 +186,27 @@ void PixelWorldEngine::Graphics::Graphics::SetBlendState(bool state)
 
 	deviceContext->OMSetBlendState(blendState, nullptr, 0);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Graphics::DrawIndexed(int indexCount, int startIndexLocation, int baseVertexLocation)
 {
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	deviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	deviceContext->IASetInputLayout(inputLayout);
 	deviceContext->DrawIndexed(indexCount, startIndexLocation, baseVertexLocation);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 PixelWorldEngine::Graphics::Graphics::~Graphics()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(device);
 	Utility::Dipose(deviceContext);
-#endif // WINDOWS
+#endif // _WIN32
 }

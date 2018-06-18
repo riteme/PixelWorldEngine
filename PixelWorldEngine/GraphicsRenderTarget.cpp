@@ -12,7 +12,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics,Textur
 
 	pixelFormat = texture->GetPixelFormat();
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
 
@@ -23,7 +23,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics,Textur
 	graphics->device->CreateRenderTargetView(texture->resource,
 		&viewDesc, &renderTarget);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
@@ -36,7 +36,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Appli
 
 	pixelFormat = PixelFormat::R8G8B8A8;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	ID3D11Texture2D* backBuffer = nullptr;
 
@@ -45,26 +45,26 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Appli
 	graphics->device->CreateRenderTargetView(backBuffer, nullptr, &renderTarget);
 
 	Utility::Dipose(backBuffer);
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 PixelWorldEngine::Graphics::RenderTarget::~RenderTarget()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(renderTarget);
-#endif // WINDOWS
+#endif // _WIN32
 }
 
 void PixelWorldEngine::Graphics::RenderTarget::Clear(float red, float green, float blue, float alpha)
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	float color[4] = { red,green,blue,alpha };
 
 	graphics->deviceContext->ClearRenderTargetView(renderTarget, color);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 

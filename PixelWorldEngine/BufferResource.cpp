@@ -11,7 +11,7 @@ PixelWorldEngine::Graphics::Buffer::Buffer(Graphics* Graphics, void * data, int 
 	count = dataCount;
 	type = bufferType;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	
 	desc.BindFlags = (D3D11_BIND_FLAG)type;
@@ -23,16 +23,16 @@ PixelWorldEngine::Graphics::Buffer::Buffer(Graphics* Graphics, void * data, int 
 
 	graphics->device->CreateBuffer(&desc, nullptr, &buffer);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 	Update(data);
 }
 
 PixelWorldEngine::Graphics::Buffer::~Buffer() 
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(buffer);
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 

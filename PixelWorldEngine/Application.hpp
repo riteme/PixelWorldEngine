@@ -28,22 +28,22 @@ namespace PixelWorldEngine {
 		Graphics::Graphics* graphics;
 		Graphics::RenderTarget* renderTarget;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		HWND hwnd = nullptr;
 
 		static LRESULT CALLBACK DefaultWindowProc(HWND hWnd, UINT message,
 			WPARAM wParam, LPARAM lParam);
-#endif // WINDOWS
+#endif // _WIN32
 
 	public:
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		DXGI_SWAP_CHAIN_DESC swapDesc;
 
 		IDXGISwapChain* swapChain;
 
 
-#endif //WINDOWS
+#endif //_WIN32
 
 	private:
 		void OnMouseMove(void* sender, PixelWorldEngine::Events::MouseMoveEvent* eventArg);
@@ -58,9 +58,9 @@ namespace PixelWorldEngine {
 
 		void OnUpdate(void* sender);
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		void OnProcessMessage(MSG message);
-#endif // WINDOWS
+#endif // _WIN32
 
 
 	public:

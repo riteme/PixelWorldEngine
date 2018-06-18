@@ -23,12 +23,12 @@ namespace PixelWorldEngine {
 
 			BufferType type;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			D3D11_BUFFER_DESC desc;
 
 			ID3D11Buffer* buffer;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
 			Buffer(Graphics* graphics, void* data, int dataSize, int dataCount = 1, BufferType bufferType = BufferType::ConstantBuffer);
