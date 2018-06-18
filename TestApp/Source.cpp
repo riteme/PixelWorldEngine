@@ -3,9 +3,10 @@
 
 using namespace PixelWorldEngine;
 
-int main() {
-	Application application(L"Application");
+Application application(L"Application");
 
+int main() {
+	
 	application.MakeWindow(L"TestApp", 1280, 720, nullptr);
 	application.ShowWindow();
 	application.RunLoop();

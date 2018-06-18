@@ -37,7 +37,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BufferResource.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
-    <ClCompile Include="Events.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GraphicsRenderTarget.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />

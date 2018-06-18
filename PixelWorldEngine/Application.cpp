@@ -5,10 +5,23 @@
 #define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEYUP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
 
+bool sizeChange = false;
+
+int newWidth;
+int newHeight;
+
 LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
+	case WM_SIZE: {
+		sizeChange = true;
+
+		newWidth = LOWORD(lParam);
+		newHeight = HIWORD(lParam);
+
+		break;
+	}
 	case WM_DESTROY: {
 		PostQuitMessage(0);
 		break;
@@ -26,7 +39,6 @@ void PixelWorldEngine::Application::OnMouseMove(void * sender, PixelWorldEngine:
 {
 	mousePositionX = eventArg->x;
 	mousePositionY = eventArg->y;
-
 }
 
 void PixelWorldEngine::Application::OnMouseWheel(void * sender, PixelWorldEngine::Events::MouseWheelEvent * eventArg)
@@ -35,6 +47,7 @@ void PixelWorldEngine::Application::OnMouseWheel(void * sender, PixelWorldEngine
 
 void PixelWorldEngine::Application::OnMouseClick(void * sender, PixelWorldEngine::Events::MouseClickEvent * eventArg)
 {
+
 }
 
 void PixelWorldEngine::Application::OnKeyClick(void * sender, PixelWorldEngine::Events::KeyClickEvent * eventArg)
@@ -44,8 +57,8 @@ void PixelWorldEngine::Application::OnKeyClick(void * sender, PixelWorldEngine::
 
 void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine::Events::SizeChangeEvent * eventArg)
 {
-	windowWidth = eventArg->nowWidth;
-	windowHeight = eventArg->nowHeight;
+	windowWidth = eventArg->width;
+	windowHeight = eventArg->height;
 }
 
 void PixelWorldEngine::Application::OnUpdate(void * sender)
@@ -198,21 +211,19 @@ void PixelWorldEngine::Application::OnProcessMessage(MSG message)
 		break;
 	}
 
-	case WM_SIZE: {
-		auto eventArg = &Events::SizeChangeEvent();
-
-		eventArg->lastWidth = windowWidth;
-		eventArg->lastHeight = windowHeight;
-		eventArg->nowWidth = LOWORD(message.lParam);
-		eventArg->nowHeight = HIWORD(message.lParam);
-
-		OnSizeChange(this, eventArg);
-
+	default:
 		break;
 	}
 
-	default:
-		break;
+	if (sizeChange == true) {
+		auto eventArg = &Events::SizeChangeEvent();
+
+		eventArg->width = newWidth;
+		eventArg->height = newHeight;
+
+		OnSizeChange(this, eventArg);
+
+		sizeChange = false;
 	}
 }
 
@@ -252,7 +263,17 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 #ifdef WINDOWS
 		SetWindowText(hwnd, windowName);
-		SetWindowPos(hwnd, nullptr, 0, 0, windowWidth, windowHeight,
+
+		RECT rect;
+
+		rect.top = 0;
+		rect.left = 0;
+		rect.right = windowWidth;
+		rect.bottom = windowHeight;
+
+		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
+
+		SetWindowPos(hwnd, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top,
 			SWP_NOZORDER ^ SWP_NOMOVE);
 #endif // WINDOWS
 
@@ -325,7 +346,6 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 		Utility::Dipose(device);
 		Utility::Dipose(adapter);
 		Utility::Dipose(factory);
-
 #endif // WINDOWS
 
 #ifdef LIUNX
@@ -375,8 +395,7 @@ void PixelWorldEngine::Application::RunLoop()
 	while (isWindowCreated == true) {
 
 #ifdef WINDOWS
-
-		if (message.message == WM_QUIT) isWindowCreated = false;
+		MSG message;
 
 		if (PeekMessage(&message, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&message);
@@ -384,6 +403,8 @@ void PixelWorldEngine::Application::RunLoop()
 
 			OnProcessMessage(message);
 		}
+
+		if (message.message == WM_QUIT) isWindowCreated = false;
 #endif // WINDOWS
 
 #ifdef LIUNX

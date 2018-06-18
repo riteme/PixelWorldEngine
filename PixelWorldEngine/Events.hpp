@@ -34,8 +34,6 @@ namespace PixelWorldEngine {
 			int x, y;
 
 			MouseMoveEvent() = default;
-
-			MouseMoveEvent(int X, int Y);
 		};
 
 		//enum of mouse button
@@ -50,8 +48,6 @@ namespace PixelWorldEngine {
 			MouseButton button;
 
 			MouseClickEvent() = default;
-
-			MouseClickEvent(int X, int Y, bool IsDown, MouseButton Button);
 		};
 
 		//MouseWheel Event
@@ -60,8 +56,6 @@ namespace PixelWorldEngine {
 			int offset; //the mouse wheel move + is up,- is down
 
 			MouseWheelEvent() = default;
-
-			MouseWheelEvent(int X, int Y, int Offset);
 		};
 
 		//BoardClick Event
@@ -70,19 +64,14 @@ namespace PixelWorldEngine {
 			bool isDown;
 
 			KeyClickEvent() = default;
-
-			KeyClickEvent(KeyCode KeyCode, bool IsDown);
 		};
 
 		//SizeChange Event
 		struct SizeChangeEvent :EventBase {
-			int lastWidth, lastHeight;
-			int nowWidth, nowHeight;
+			int width;
+			int height;
 
 			SizeChangeEvent() = default;
-
-			SizeChangeEvent(int LastWidth, int LastHeight,
-				int NowWidth, int NowHeight);
 		};
 	}
 }

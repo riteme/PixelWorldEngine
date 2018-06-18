@@ -32,8 +32,6 @@ namespace PixelWorldEngine {
 #ifdef WINDOWS
 		HWND hwnd = nullptr;
 
-		MSG message;
-
 		static LRESULT CALLBACK DefaultWindowProc(HWND hWnd, UINT message,
 			WPARAM wParam, LPARAM lParam);
 #endif // WINDOWS

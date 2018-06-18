@@ -6,6 +6,8 @@
 PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> ShaderCode,
 	const char * VertexShaderFunction, const char * PixelShaderFunction)
 {
+	//没有编译过的着色器
+
 	graphics = Graphics;
 	
 #ifdef WINDOWS
@@ -50,6 +52,8 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 
 PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode)
 {
+	//已经编译过的着色器
+
 	graphics = Graphics;
 
 #ifdef WINDOWS

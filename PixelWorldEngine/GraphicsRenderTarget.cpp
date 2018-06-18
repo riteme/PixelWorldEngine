@@ -58,9 +58,14 @@ PixelWorldEngine::Graphics::RenderTarget::~RenderTarget()
 
 void PixelWorldEngine::Graphics::RenderTarget::Clear(float red, float green, float blue, float alpha)
 {
+#ifdef WINDOWS
+
 	float color[4] = { red,green,blue,alpha };
 
 	graphics->deviceContext->ClearRenderTargetView(renderTarget, color);
+
+#endif // WINDOWS
+
 }
 
 auto PixelWorldEngine::Graphics::RenderTarget::GetWidth() -> int
