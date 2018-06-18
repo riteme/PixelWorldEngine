@@ -85,6 +85,7 @@
     <Link>
       <HeapReserveSize>
       </HeapReserveSize>
+      <SubSystem>NotSet</SubSystem>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -1,6 +1,4 @@
-
-#ifndef _KEYCODE_H_
-#define _KEYCODE_H_
+#pragma once
 
 namespace PixelWorldEngine {
 
@@ -125,7 +123,3 @@ namespace PixelWorldEngine {
 	};
 
 }
-
-#endif // !_KEYCODE_H_
-
-

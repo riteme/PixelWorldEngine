@@ -1,11 +1,14 @@
-#ifndef _PCH_H_
-#define _PCH_H_
-
+#pragma once
 
 #include <string>
 #include <vector>
 #include <map>
 
+namespace PixelWorldEngine {
+
+	typedef unsigned char byte;
+
+}
 #ifdef WINDOWS
 
 #include <Windows.h>
@@ -21,9 +24,4 @@
 #endif // _WINDOWS_
 
 #ifdef DEBUG
-
-#include <iostream>
-
 #endif
-
-#endif // !_PCH_H_

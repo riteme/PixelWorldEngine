@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _BASESTRUCT_H_
-#define _BASESTRUCT_H_
+#include "pch.hpp"
 
 namespace PixelWorldEngine {
 
@@ -9,10 +8,27 @@ namespace PixelWorldEngine {
 		float x, y, z;
 		float red, green, blue, alpha;
 		float u1, v1;
+
+		void SetPosition(float X, float Y, float Z) {
+			x = X;
+			y = Y;
+			z = Z;
+		}
+
+		void SetTexturePosition1(float u, float v) {
+			u1 = u;
+			v1 = v;
+		}
 	};
 
-	typedef unsigned char byte;
+	struct Rectangle {
+		int left;
+		int top;
+		int right;
+		int bottom;
+
+		Rectangle() = default;
+	};
 
 }
 
-#endif // !_BASESTRUCT_H_

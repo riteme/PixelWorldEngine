@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICSSHADER_H_
-#define _GRAPHICSSHADER_H_
+#include "pch.hpp"
 
 #include "BaseStruct.hpp"
 
@@ -40,5 +39,3 @@ namespace PixelWorldEngine {
 	}
 
 }
-
-#endif // !_GRAPHICSSHADER_H_

@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _SHADERRESOURCE_H_
-#define _SHADERRESOURCE_H_
+#include "pch.hpp"
 
 #include "Utility.hpp"
 #include "GraphicsEnum.hpp"
@@ -59,5 +58,3 @@ namespace PixelWorldEngine {
 		};
 	}
 }
-
-#endif // !_SHADERRESOURCE_H_

@@ -1,9 +1,8 @@
+#pragma once
+
 #include "pch.hpp"
 
 #include "KeyCode.hpp"
-
-#ifndef _EVENTS_H_
-#define _EVENTS_H_
 
 namespace PixelWorldEngine {
 
@@ -75,6 +74,3 @@ namespace PixelWorldEngine {
 		};
 	}
 }
-
-#endif // !_EVENTS_H_
-

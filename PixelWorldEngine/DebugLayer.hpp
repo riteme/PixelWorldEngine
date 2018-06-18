@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _DEBUGLAYER_H_
-#define _DEBUGLAYER_H_
+#include "pch.hpp"
 
 #define MAX_ERROR_TEXT 100
 
@@ -32,4 +31,3 @@ namespace PixelWorldEngine {
 	};
 
 }
-#endif // !_DEBUGLAYER_H_

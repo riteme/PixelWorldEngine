@@ -1,13 +1,12 @@
 #include "..\PixelWorldEngine\Application.hpp"
 #include "..\PixelWorldEngine\DebugLayer.hpp"
+#include "..\PixelWorldEngine\PixelWorld.hpp"
 
 using namespace PixelWorldEngine;
 
-Application application(L"Application");
+#pragma comment(linker, "/subsystem:\"windows\" /entry:\"mainCRTStartup\"" )
+
 
 int main() {
 	
-	application.MakeWindow(L"TestApp", 1280, 720, nullptr);
-	application.ShowWindow();
-	application.RunLoop();
 }

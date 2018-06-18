@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICSENUM_H_
-#define _GRAPHICSENUM_H_
+#include "pch.hpp"
 
 namespace PixelWorldEngine {
 
@@ -14,5 +13,3 @@ namespace PixelWorldEngine {
 		};
 	}
 }
-
-#endif // !_GRAPHICSENUM_H_

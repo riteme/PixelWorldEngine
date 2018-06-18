@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICSRENDERTARGET_H_
-#define _GRAPHICSRENDERTARGET_H_
+#include "pch.hpp"
 
 #include "GraphicsEnum.hpp"
 #include "ShaderResource.hpp"
@@ -46,5 +45,3 @@ namespace PixelWorldEngine {
 	}
 
 }
-
-#endif // !_GRAPHICSRENDERTARGET_H_

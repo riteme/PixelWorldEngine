@@ -52,6 +52,8 @@ PixelWorldEngine::Graphics::Texture2D::~Texture2D()
 
 void PixelWorldEngine::Graphics::Texture2D::Update(void * data)
 {
+	if (data == nullptr) return;
+
 #ifdef WINDOWS
 
 	graphics->deviceContext->UpdateSubresource(resource,

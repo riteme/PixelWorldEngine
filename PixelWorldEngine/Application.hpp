@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _APPLICATION_H_
-#define _APPLICATION_H_
+#include "pch.hpp"
 
 #include "KeyCode.hpp"
 #include "Events.hpp"
@@ -13,13 +12,13 @@ namespace PixelWorldEngine {
 
 	class Application {
 	private:
-		wchar_t* applicationName;
+		std::wstring applicationName;
 
 		int windowWidth = 0;
 		int windowHeight = 0;
 
-		wchar_t* windowName;
-		wchar_t* iconName;
+		std::wstring windowName;
+		std::wstring iconName;
 
 		bool isWindowCreated = false;
 
@@ -85,5 +84,3 @@ namespace PixelWorldEngine {
 	};
 
 }
-
-#endif // !_APPLICATION_H_

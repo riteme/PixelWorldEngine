@@ -2,11 +2,27 @@
 
 auto PixelWorldEngine::Utility::CharArrayToString(char str[]) -> std::string
 {
+	if (str == nullptr) return std::string();
+
 	auto length = strlen(str);
 
 	std::string result;
 	
 	for (size_t i = 0; i < length; i++) 
+		result.push_back(str[i]);
+
+	return result;
+}
+
+auto PixelWorldEngine::Utility::WCharArrrayToWString(wchar_t str[]) -> std::wstring
+{
+	if (str == nullptr) return std::wstring();
+
+	auto length = wcslen(str);
+
+	std::wstring result;
+
+	for (size_t i = 0; i < length; i++)
 		result.push_back(str[i]);
 
 	return result;

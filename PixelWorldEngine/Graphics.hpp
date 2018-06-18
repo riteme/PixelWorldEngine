@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICS_H_
-#define _GRAPHICS_H_
+#include "pch.hpp"
 
 #include "Utility.hpp"
 #include "DebugLayer.hpp"
@@ -74,5 +73,3 @@ namespace PixelWorldEngine {
 	}
 
 }
-
-#endif // !_GRAPHICS_H_
