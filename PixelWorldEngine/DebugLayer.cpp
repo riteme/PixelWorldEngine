@@ -12,7 +12,9 @@ auto PixelWorldEngine::DebugLayer::GetErrorMessage(Error error, va_list args) ->
 
 void PixelWorldEngine::DebugLayer::ReportMessage(std::string message) 
 {
+#ifdef DEBUG
 	std::cout << message << std::endl;
+#endif // DEBUG
 }
 
 void PixelWorldEngine::DebugLayer::ReportError(Error error, ...)

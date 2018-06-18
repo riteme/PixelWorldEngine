@@ -32,6 +32,8 @@ namespace PixelWorldEngine {
 #ifdef WINDOWS
 		HWND hwnd = nullptr;
 
+		MSG message;
+
 		static LRESULT CALLBACK DefaultWindowProc(HWND hWnd, UINT message,
 			WPARAM wParam, LPARAM lParam);
 #endif // WINDOWS
@@ -58,6 +60,12 @@ namespace PixelWorldEngine {
 		void OnSizeChange(void* sender, PixelWorldEngine::Events::SizeChangeEvent* eventArg);
 
 		void OnUpdate(void* sender);
+
+#ifdef WINDOWS
+		void OnProcessMessage(MSG message);
+#endif // WINDOWS
+
+
 	public:
 		Application(const wchar_t* ApplicationName);
 
@@ -74,6 +82,8 @@ namespace PixelWorldEngine {
 		auto GetWindowWidth() -> int;
 
 		auto GetWindowHeight() -> int;
+
+		auto GetGraphics() -> Graphics::Graphics*;
 	};
 
 }
