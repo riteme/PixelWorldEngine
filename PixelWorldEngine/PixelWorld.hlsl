@@ -1,17 +1,17 @@
 #pragma pack_matrix(row_major) 
 
-struct InputData 
+struct InputData
 {
     float3 position : POSITION;
     float4 color : COLOR;
-    float2 tex1 : TEXCOORD1;
-}; 
+    float2 tex0 : TEXCOORD0;
+};
 
 struct OutputData
 {
     float4 positionH : SV_POSITION;
     float4 color : COLOR;
-    float2 tex1 : TEXCOORD1;
+    float2 tex0 : TEXCOORD0;
 };
 
 cbuffer Camera : register(b0)
@@ -32,7 +32,7 @@ OutputData vs_main(InputData input)
     result.positionH = mul(result.positionH, project);
 
     result.color = input.color;
-    result.tex1 = input.tex1;
+    result.tex0 = input.tex0;
 
     return result;
 }

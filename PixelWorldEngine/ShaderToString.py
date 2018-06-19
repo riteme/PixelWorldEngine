@@ -1,25 +1,31 @@
 import sys
 
-shaderFile = open("shader.hlsl", "r")
+def CreateCharArray(fileName, suffixName):
+    shaderFile = open(fileName + suffixName, "r")
+    
+    data = shaderFile.readlines()
+    
+    shaderFile.close()
 
-data = shaderFile.readlines()
+    result = "constexpr char "+ fileName + "DefaultShaderCode[] = \""
 
-shaderFile.close()
+    for item in data:
+        item = item.replace('\n', ' ')
+        result += item + r'\n'
+    pass
+
+    result+="\";"
+
+    return result
 
 result = ""
 
 result += "#include \"pch.hpp\"\n\n"
 
-result += "namespace PixelWorldEngine {\n\t"
+result += "namespace PixelWorldEngine {\n"
 
-result += "constexpr char defaultShaderCode[] = \""
-
-for item in data:
-    item = item.replace('\n', ' ')
-    result += item + r'\n'
-    pass
-
-result += "\";"
+result += "\t" + CreateCharArray("PixelWorld", ".hlsl") + "\n"
+result += "\t" + CreateCharArray("Application", ".hlsl") + "\n"
 
 result += "\n}"
 

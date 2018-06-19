@@ -3,6 +3,7 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
+
 PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> ShaderCode,
 	const char * VertexShaderFunction, const char * PixelShaderFunction)
 {
@@ -15,7 +16,7 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 	ID3DBlob* result;
 	ID3DBlob* error;
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	UINT flag = D3DCOMPILE_DEBUG;
 #else
 	UINT flag = D3DCOMPILE_OPTIMIZATION_LEVEL2;
@@ -24,6 +25,8 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 	D3DCompile(&ShaderCode[0], ShaderCode.size(), nullptr, nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, VertexShaderFunction, "vs_5_0", flag, 0,
 		&result, &error);
+
+	//DebugLayer::Assert(true, Error::ShaderCompiledFailed, error->GetBufferPointer());
 
 	graphics->device->CreateVertexShader(result->GetBufferPointer(), result->GetBufferSize(),
 		nullptr, &vertexShader);

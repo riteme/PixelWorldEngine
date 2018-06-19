@@ -133,7 +133,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.hlsl">
+    <None Include="Application.hlsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="PixelWorld.hlsl">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

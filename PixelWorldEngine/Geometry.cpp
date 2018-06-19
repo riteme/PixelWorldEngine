@@ -30,10 +30,10 @@ PixelWorldEngine::Graphics::Rectangle::Rectangle(float left, float top, float ri
 	//left-top left-bottom right-bottom right-top
 	Vertex vertics[4];
 
-	vertics[0].SetPosition(left, top, 0);
-	vertics[1].SetPosition(left, bottom, 0);
-	vertics[2].SetPosition(right, bottom, 0);
-	vertics[3].SetPosition(right, top, 0);
+	vertics[0].SetPosition(left, top, 1);
+	vertics[1].SetPosition(left, bottom, 1);
+	vertics[2].SetPosition(right, bottom, 1);
+	vertics[3].SetPosition(right, top, 1);
 
 	vertics[0].SetTexturePosition1(0, 0);
 	vertics[1].SetTexturePosition1(0, 1);
@@ -43,8 +43,8 @@ PixelWorldEngine::Graphics::Rectangle::Rectangle(float left, float top, float ri
 	int indices[6];
 
 	indices[0] = 0;
-	indices[1] = 1;
-	indices[2] = 2;
+	indices[1] = 2;
+	indices[2] = 1;
 	indices[3] = 2;
 	indices[4] = 0;
 	indices[5] = 3;

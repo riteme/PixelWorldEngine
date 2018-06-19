@@ -45,6 +45,10 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 
+
+	SetFillMode(FillMode::FillSolid);
+	SetBlendState(false);
+
 #endif // _WIN32
 }
 
@@ -54,6 +58,8 @@ void PixelWorldEngine::Graphics::Graphics::SetShader(GraphicsShader* shader)
 #ifdef _WIN32
 
 	auto vertexShaderCode = shader->GetVertexShaderCode();
+
+	Utility::Dipose(inputLayout);
 
 	device->CreateInputLayout(&elementDesc[0], 3, &vertexShaderCode[0], vertexShaderCode.size(), &inputLayout);
 
@@ -69,8 +75,9 @@ void PixelWorldEngine::Graphics::Graphics::SetVertexBuffer(Buffer* buffer)
 #ifdef _WIN32
 	
 	UINT size = buffer->GetSize() / buffer->GetCount();
+	UINT offset = 0;
 
-	deviceContext->IASetVertexBuffers(0, 1, &buffer->buffer, &size, nullptr);
+	deviceContext->IASetVertexBuffers(0, 1, &buffer->buffer, &size, &offset);
 
 #endif // _WIN32
 
@@ -184,7 +191,27 @@ void PixelWorldEngine::Graphics::Graphics::SetBlendState(bool state)
 
 	device->CreateBlendState(&blendDesc, &blendState);
 
-	deviceContext->OMSetBlendState(blendState, nullptr, 0);
+	deviceContext->OMSetBlendState(blendState, nullptr, 0xffffffff);
+
+#endif // _WIN32
+
+}
+
+void PixelWorldEngine::Graphics::Graphics::SetViewPort(Rectangle rect)
+{
+
+#ifdef _WIN32
+
+	D3D11_VIEWPORT viewPort;
+
+	viewPort.MinDepth = 0;
+	viewPort.MaxDepth = 1;
+	viewPort.TopLeftX = (float)rect.left;
+	viewPort.TopLeftY = (float)rect.top;
+	viewPort.Width = (float)(rect.right - rect.left);
+	viewPort.Height = (float)(rect.bottom - rect.top);
+
+	deviceContext->RSSetViewports(1, &viewPort);
 
 #endif // _WIN32
 

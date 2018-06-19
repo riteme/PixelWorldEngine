@@ -38,6 +38,8 @@ PixelWorldEngine::Graphics::Buffer::~Buffer()
 
 void PixelWorldEngine::Graphics::Buffer::Update(void * data)
 {
+	if (data == nullptr) return;
+
 	graphics->deviceContext->UpdateSubresource(buffer, 0, nullptr,
 		data, 0, 0);
 }

@@ -12,6 +12,15 @@
 namespace PixelWorldEngine {
 
 	/**
+	 * 用来表述用途不同的缓冲的在着色器以及数组的ID
+	 */
+	enum class BufferIndex : int {
+		CameraBuffer, //摄像机矩阵缓冲
+		TransformBuffer, //变换矩阵缓冲
+		Count
+	};
+
+	/**
 	 * @brief 引擎的核心世界
 	 */
 	class PixelWorld {
@@ -31,9 +40,14 @@ namespace PixelWorldEngine {
 		Graphics::GraphicsShader* defaultShader; //默认着色器
 		Graphics::GraphicsShader* shader; //使用的着色器
 
+		std::vector<Graphics::Buffer*> buffers; //缓冲数组
+
 		Graphics::Rectangle* square; //正方形
+		Graphics::Rectangle* renderObject; //画布
 
 		std::map<int, Graphics::Texture2D> renderObjectIDGroup; //用于存储纹理，不同的ID对应不同的纹理
+
+		friend class Application;
 	public:
 		/**
 		 * @brief 构造函数

@@ -1,5 +1,7 @@
 ﻿#include "Application.hpp"
 
+#include "EngineDefaultResource.hpp"
+
 #ifdef _WIN32
 
 #define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
@@ -63,9 +65,32 @@ void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine
 
 void PixelWorldEngine::Application::OnUpdate(void * sender)
 {
+	OnRender(sender);
+}
+
+void PixelWorldEngine::Application::OnRender(void * sender)
+{
+	auto worldTexture = pixelWorld->GetCurrentWorld();
+
+	auto matrix = Camera(Rectangle(0.f, 0.f, (float)worldTexture->GetWidth(), (float)worldTexture->GetHeight())).GetMatrix();
+
+	cameraBuffer->Update(&matrix);
+
 	renderTarget->Clear(0, 0, 0);
 
 	graphics->SetRenderTarget(renderTarget);
+
+	graphics->SetViewPort(Rectangle(0.f, 0.f, (float)windowWidth, (float)windowHeight));
+
+	graphics->SetShader(defaultShader);
+
+	graphics->SetVertexBuffer(pixelWorld->renderObject->GetVertexBuffer());
+	graphics->SetIndexBuffer(pixelWorld->renderObject->GetIndexBuffer());
+
+	graphics->SetConstantBuffer(cameraBuffer, 0);
+	graphics->SetShaderResource(worldTexture, 0);
+
+	graphics->DrawIndexed(pixelWorld->renderObject->GetIndexBuffer()->GetCount());
 
 #ifdef _WIN32
 
@@ -236,6 +261,11 @@ PixelWorldEngine::Application::Application(const wchar_t * ApplicationName)
 
 	graphics = new Graphics::Graphics();
 
+	cameraBuffer = new Graphics::Buffer(graphics, nullptr, sizeof(glm::mat4x4));
+	
+	defaultShader = new Graphics::GraphicsShader(graphics, 
+		Utility::CharArrayToVector((char*)&ApplicationDefaultShaderCode[0]));
+
 #ifdef _WIN32
 	ImmDisableIME(0);
 #endif // _WIN32
@@ -247,6 +277,10 @@ PixelWorldEngine::Application::Application(const wchar_t * ApplicationName)
 
 PixelWorldEngine::Application::~Application()
 {
+	Utility::Delete(cameraBuffer);
+
+	Utility::Delete(defaultShader);
+
 	Utility::Delete(renderTarget);
 	Utility::Delete(graphics);
 }
@@ -411,6 +445,11 @@ void PixelWorldEngine::Application::RunLoop()
 
 		OnUpdate(this);
 	}
+}
+
+void PixelWorldEngine::Application::SetWorld(PixelWorld * PixelWorld)
+{
+	pixelWorld = PixelWorld;
 }
 
 auto PixelWorldEngine::Application::GetWindowWidth() -> int

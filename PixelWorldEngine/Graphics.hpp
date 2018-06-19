@@ -66,6 +66,9 @@ namespace PixelWorldEngine {
 			//其中Src表示我们渲染出来的像素，Dst表示在后台缓冲中的像素。
 			void SetBlendState(bool state);
 
+			//表示整个后台缓冲中可见的范围
+			void SetViewPort(PixelWorldEngine::Rectangle rect);
+
 			void DrawIndexed(int indexCount, int startIndexLocation = 0, int baseVertexLocation = 0);
 
 			~Graphics();

@@ -8,6 +8,8 @@
 #include "Graphics.hpp"
 #include "GraphicsRenderTarget.hpp"
 
+#include "PixelWorld.hpp"
+
 namespace PixelWorldEngine {
 
 	class Application {
@@ -27,6 +29,11 @@ namespace PixelWorldEngine {
 
 		Graphics::Graphics* graphics;
 		Graphics::RenderTarget* renderTarget;
+
+		Graphics::Buffer* cameraBuffer;
+		Graphics::GraphicsShader* defaultShader;
+
+		PixelWorld* pixelWorld;
 
 #ifdef _WIN32
 		HWND hwnd = nullptr;
@@ -58,6 +65,8 @@ namespace PixelWorldEngine {
 
 		void OnUpdate(void* sender);
 
+		void OnRender(void* sender);
+
 #ifdef _WIN32
 		void OnProcessMessage(MSG message);
 #endif // _WIN32
@@ -75,6 +84,8 @@ namespace PixelWorldEngine {
 		void HideWindow();
 
 		void RunLoop();
+
+		void SetWorld(PixelWorld* pixelWorld);
 
 		auto GetWindowWidth() -> int;
 

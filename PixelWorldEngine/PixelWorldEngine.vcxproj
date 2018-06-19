@@ -54,7 +54,10 @@
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader.hlsl">
+    <None Include="Application.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="PixelWorld.hlsl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

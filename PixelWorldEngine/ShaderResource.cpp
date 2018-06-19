@@ -19,7 +19,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(Graphics* Graphics, void * Data
 #ifdef _WIN32
 
 	desc.ArraySize = 1;
-	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
+	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET;
 	desc.CPUAccessFlags = 0;
 	desc.Format = (DXGI_FORMAT)pixelFormat;
 	desc.Height = height;

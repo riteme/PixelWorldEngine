@@ -8,18 +8,29 @@ PixelWorldEngine::PixelWorld::PixelWorld(std::wstring WorldName, Application * A
 	worldName = WorldName;
 	graphics = Application->GetGraphics();
 
-	square = new Graphics::Rectangle(0, 0, 1, 1, graphics);
+	square = new Graphics::Rectangle(0, 0, 100, 100, graphics);
 
-	defaultShader = new Graphics::GraphicsShader(graphics, Utility::CharArrayToVector((char*)defaultShaderCode));
+	buffers.resize((int)BufferIndex::Count);
+
+	auto matrix = glm::mat4(1);
+
+	buffers[(int)BufferIndex::CameraBuffer] = new Graphics::Buffer(graphics, &matrix , sizeof(glm::mat4x4));
+	buffers[(int)BufferIndex::TransformBuffer] = new Graphics::Buffer(graphics, &matrix, sizeof(glm::mat4x4));
+
+	defaultShader = new Graphics::GraphicsShader(graphics, Utility::CharArrayToVector((char*)PixelWorldDefaultShaderCode));
 
 	SetShader();
 }
 
 PixelWorldEngine::PixelWorld::~PixelWorld()
 {
+	for (size_t i = 0; i < buffers.size(); i++)
+		Utility::Delete(buffers[i]);
+
 	Utility::Delete(defaultShader);
 	Utility::Delete(renderBuffer);
 	Utility::Delete(renderTarget);
+	Utility::Delete(renderObject);
 }
 
 void PixelWorldEngine::PixelWorld::SetResolution(int width, int height)
@@ -28,6 +39,7 @@ void PixelWorldEngine::PixelWorld::SetResolution(int width, int height)
 
 	Utility::Delete(renderBuffer);
 	Utility::Delete(renderTarget);
+	Utility::Delete(renderObject);
 
 	resolutionWidth = width;
 	resolutionHeight = height;
@@ -36,25 +48,27 @@ void PixelWorldEngine::PixelWorld::SetResolution(int width, int height)
 		Graphics::PixelFormat::R8G8B8A8);
 
 	renderTarget = new Graphics::RenderTarget(graphics, renderBuffer);
+
+	renderObject = new Graphics::Rectangle(0, 0, (float)width, (float)height, graphics);
 }
 
 void PixelWorldEngine::PixelWorld::SetCamera(Camera Camera)
 {
 	camera = Camera;
+
+	auto matrix = camera.GetMatrix();
+
+	buffers[(int)BufferIndex::CameraBuffer]->Update(&matrix);
 }
 
 void PixelWorldEngine::PixelWorld::SetShader(Graphics::GraphicsShader * Shader)
 {
 	shader = Shader;
-
-	graphics->SetShader(shader);
 }
 
 void PixelWorldEngine::PixelWorld::SetShader()
 {
 	shader = defaultShader;
-
-	graphics->SetShader(shader);
 }
 
 auto PixelWorldEngine::PixelWorld::GetCurrentWorld() -> Graphics::Texture2D *
@@ -62,9 +76,17 @@ auto PixelWorldEngine::PixelWorld::GetCurrentWorld() -> Graphics::Texture2D *
 	renderTarget->Clear(0, 0, 0);
 
 	graphics->SetRenderTarget(renderTarget);
+	
+	graphics->SetViewPort(Rectangle(0.f, 0.f, (float)resolutionWidth, (float)resolutionHeight));
+
+	graphics->SetShader(shader);
 
 	graphics->SetVertexBuffer(square->GetVertexBuffer());
 	graphics->SetIndexBuffer(square->GetIndexBuffer());
+	
+	graphics->SetConstantBuffers(buffers, 0);
+
+	graphics->DrawIndexed(square->GetIndexBuffer()->GetCount());
 
 	return renderBuffer;
 }
