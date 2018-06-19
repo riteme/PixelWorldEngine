@@ -2,20 +2,20 @@
 
 #include "pch.hpp"
 
-#define MAX_ERROR_TEXT 100
-
 namespace PixelWorldEngine {
 
 	enum class Error {
 		//There are more than one application.
 		MoreThanOneInstance,
 		TheDataIsNull,
+		ShaderCompiledFailed,
 		Count
 	};
 
 	static const char* messageTemplate[(int)Error::Count] = {
 		"There are more than one instance.",
-		"The data is null."
+		"The data is null.",
+		"The shader was compiled failed. Code : %s"
 	};
 
 	class DebugLayer {

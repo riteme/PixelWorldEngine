@@ -23,6 +23,7 @@
     <ClInclude Include="BaseStruct.hpp" />
     <ClInclude Include="BufferResource.hpp" />
     <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="EngineDefaultResource.hpp" />
     <ClInclude Include="Geometry.hpp" />
     <ClInclude Include="DataManager.hpp" />
     <ClInclude Include="DebugLayer.hpp" />
@@ -42,6 +43,7 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BufferResource.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
     <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
@@ -50,6 +52,11 @@
     <ClCompile Include="PixelWorld.cpp" />
     <ClCompile Include="ShaderResource.cpp" />
     <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.hlsl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

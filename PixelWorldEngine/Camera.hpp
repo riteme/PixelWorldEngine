@@ -27,7 +27,7 @@ namespace PixelWorldEngine {
 		 * @brief 构造函数
 		 * param[in] rectangle 表示摄像机能够看到的范围
 		 */
-		Camera(Rectangle rectangle);
+		Camera(Rectangle square);
 
 		/**
 		 * @brief 获取摄像机能够看到的范围

@@ -28,6 +28,20 @@ auto PixelWorldEngine::Utility::WCharArrrayToWString(wchar_t str[]) -> std::wstr
 	return result;
 }
 
+auto PixelWorldEngine::Utility::CharArrayToVector(char str[]) -> std::vector<byte>
+{
+	if (str == nullptr) return  std::vector<byte>();
+
+	auto length = strlen(str);
+
+	std::vector<byte> vector(length);
+
+	for (size_t i = 0; i < length; i++)
+		vector[i] = str[i];
+
+	return vector;
+}
+
 auto PixelWorldEngine::Utility::CountPixelFormatSize(Graphics::PixelFormat pixelFormat) -> int
 {
 	switch (pixelFormat)

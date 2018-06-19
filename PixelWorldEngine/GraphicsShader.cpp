@@ -29,7 +29,7 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 		nullptr, &vertexShader);
 
 	for (size_t i = 0; i < result->GetBufferSize(); i++) 
-		compiledPixelShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
+		compiledVertexShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 	
 	Utility::Dipose(result);
 	Utility::Dipose(error);

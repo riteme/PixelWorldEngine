@@ -1,0 +1,5 @@
+#include "pch.hpp"
+
+namespace PixelWorldEngine {
+	constexpr char defaultShaderCode[] = "#pragma pack_matrix(row_major)  \n \nstruct InputData  \n{ \n    float3 position : POSITION; \n    float4 color : COLOR; \n    float2 tex1 : TEXCOORD1; \n};  \n \nstruct OutputData \n{ \n    float4 positionH : SV_POSITION; \n    float4 color : COLOR; \n    float2 tex1 : TEXCOORD1; \n}; \n \ncbuffer Camera : register(b0) \n{ \n    matrix project; \n}; \n \ncbuffer Transform : register(b1) \n{ \n    matrix world; \n}; \n \nOutputData vs_main(InputData input) \n{ \n    OutputData result; \n \n    result.positionH = mul(float4(input.position, 1.f), world); \n    result.positionH = mul(result.positionH, project); \n \n    result.color = input.color; \n    result.tex1 = input.tex1; \n \n    return result; \n} \n \nfloat4 ps_main(OutputData input) : SV_TARGET \n{ \n    return float4(1, 1, 1, 1); \n}\n";
+}

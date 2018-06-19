@@ -28,7 +28,10 @@ namespace PixelWorldEngine {
 		Graphics::Texture2D* renderBuffer; //存储世界被渲染后的像素信息
 		Graphics::RenderTarget* renderTarget; //..
 
-		Graphics::Rectangle* rectangle;
+		Graphics::GraphicsShader* defaultShader; //默认着色器
+		Graphics::GraphicsShader* shader; //使用的着色器
+
+		Graphics::Rectangle* square; //正方形
 
 		std::map<int, Graphics::Texture2D> renderObjectIDGroup; //用于存储纹理，不同的ID对应不同的纹理
 	public:
@@ -56,6 +59,17 @@ namespace PixelWorldEngine {
 		 * @param[in] camera 摄像机
 		 */
 		void SetCamera(Camera camera);
+
+		/**
+		 * @brief 设置我们使用的着色器
+		 * @param[in] shader 着色器的指针，注意请保持它的生命周期
+		 */
+		void SetShader(Graphics::GraphicsShader* shader);
+
+		/**
+		 * @brief 设置我们使用的着色器为默认着色器，初始值就是默认着色器
+		 */
+		void SetShader();
 
 		/**
 		 * @brief 注册一个渲染物体，注册完成后文件数据就可以释放了

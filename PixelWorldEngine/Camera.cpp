@@ -1,8 +1,8 @@
 #include "Camera.hpp"
 
-PixelWorldEngine::Camera::Camera(Rectangle rectangle)
+PixelWorldEngine::Camera::Camera(Rectangle square)
 {
-	rect = rectangle;
+	rect = square;
 
 	project = glm::ortho(rect.left, rect.right, rect.bottom, rect.top);
 }

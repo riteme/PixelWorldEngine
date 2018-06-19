@@ -9,24 +9,33 @@ namespace PixelWorldEngine {
 	 */
 	class FileData {
 	private:
-		byte* data; //指向数据内存的指针，数据按照字节存储
+		std::vector<byte> data; //数据
+		
+		friend class DataManager;
 	public:
 		/**
 		 * @brief 构造函数
 		 * @param[in] Data 文件数据
 		 */
-		FileData(byte* Data);
+		FileData(byte* Data = nullptr);
 
 		/**
-		 * @brief 释放存储数据的内存
-		*/
-		void Dipose();
+		 * @brief 获取数据大小，按字节
+		 * @return 数据大小
+		 */
+		auto GetSize() -> size_t;
 
 		/**
 		 * @brief 获取数据
 		 * @return 数据所在内存的头指针
 		 */
 		auto GetData() -> byte*;
+
+		/**
+		 * @brief 获取数据
+		 * @return 存放数据的动态数组
+		 */
+		auto GetVector() -> std::vector<byte>;
 	};
 
 	/**

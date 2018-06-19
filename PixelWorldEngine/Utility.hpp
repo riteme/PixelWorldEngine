@@ -12,6 +12,8 @@ namespace PixelWorldEngine {
 
 		static auto WCharArrrayToWString(wchar_t str[]) -> std::wstring;
 
+		static auto CharArrayToVector(char str[]) -> std::vector<byte>;
+
 		static auto CountPixelFormatSize(Graphics::PixelFormat pixelFormat) -> int;
 
 		template<typename T>
