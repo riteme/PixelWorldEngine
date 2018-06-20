@@ -40,9 +40,15 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Appli
 
 	ID3D11Texture2D* backBuffer = nullptr;
 
+	D3D11_RENDER_TARGET_VIEW_DESC viewDesc;
+
+	viewDesc.Format = (DXGI_FORMAT)pixelFormat;
+	viewDesc.Texture2D.MipSlice = 0;
+	viewDesc.ViewDimension = D3D11_RTV_DIMENSION::D3D11_RTV_DIMENSION_TEXTURE2D;
+
 	application->swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&backBuffer));
 
-	graphics->device->CreateRenderTargetView(backBuffer, nullptr, &renderTarget);
+	graphics->device->CreateRenderTargetView(backBuffer, &viewDesc, &renderTarget);
 
 	Utility::Dipose(backBuffer);
 #endif // _WIN32

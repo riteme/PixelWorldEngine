@@ -21,10 +21,10 @@ PixelWorld pixelWorld = PixelWorld(L"PixelWorld", &application);
 
 int main() {
 
-	pixelWorld.SetResolution(1280, 720);
-	pixelWorld.SetCamera(Camera(PixelWorldEngine::Rectangle(0, 0, 1280, 720)));
+	pixelWorld.SetResolution(1920, 1080);
+	pixelWorld.SetCamera(Camera(PixelWorldEngine::Rectangle(0, 0, 1920, 1080)));
 
-	application.MakeWindow(L"TestApp", 1280, 720);
+	application.MakeWindow(L"TestApp", 1920, 1080);
 	application.SetWorld(&pixelWorld);
 	application.ShowWindow();
 	application.RunLoop();

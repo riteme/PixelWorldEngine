@@ -17,6 +17,9 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 	auto createFlag = 0;
 #endif
 
+	blendEnable = false;
+	fillMode = FillMode::FillSolid;
+
 	D3D11CreateDevice(nullptr, D3D_DRIVER_TYPE::D3D_DRIVER_TYPE_HARDWARE,
 		0, createFlag, features, 4, D3D11_SDK_VERSION, &device, &feature, &deviceContext);
 
@@ -28,7 +31,7 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 	rasterizerDesc.CullMode = D3D11_CULL_MODE::D3D11_CULL_BACK;
 	rasterizerDesc.DepthBias = 0;
 	rasterizerDesc.DepthBiasClamp = 0;
-	rasterizerDesc.FillMode = D3D11_FILL_MODE::D3D11_FILL_SOLID;
+	rasterizerDesc.FillMode = (D3D11_FILL_MODE)fillMode;
 	rasterizerDesc.FrontCounterClockwise = false;
 	rasterizerDesc.MultisampleEnable = false;
 	rasterizerDesc.ScissorEnable = false;
@@ -36,7 +39,7 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 
 	blendDesc.AlphaToCoverageEnable = false;
 	blendDesc.IndependentBlendEnable = false;
-	blendDesc.RenderTarget[0].BlendEnable = false;
+	blendDesc.RenderTarget[0].BlendEnable = blendEnable;
 	blendDesc.RenderTarget[0].BlendOp = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].BlendOpAlpha = D3D11_BLEND_OP::D3D11_BLEND_OP_ADD;
 	blendDesc.RenderTarget[0].DestBlend = D3D11_BLEND::D3D11_BLEND_INV_SRC_ALPHA;
@@ -45,9 +48,11 @@ PixelWorldEngine::Graphics::Graphics::Graphics()
 	blendDesc.RenderTarget[0].SrcBlend = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 	blendDesc.RenderTarget[0].SrcBlendAlpha = D3D11_BLEND::D3D11_BLEND_SRC_ALPHA;
 
+	device->CreateRasterizerState(&rasterizerDesc, &rasterizerState);
+	device->CreateBlendState(&blendDesc, &blendState);
 
-	SetFillMode(FillMode::FillSolid);
-	SetBlendState(false);
+	deviceContext->RSSetState(rasterizerState);
+	deviceContext->OMSetBlendState(blendState, nullptr, 0xffffffff);
 
 #endif // _WIN32
 }
@@ -119,6 +124,17 @@ void PixelWorldEngine::Graphics::Graphics::SetShaderResource(ShaderResource* sha
 
 }
 
+void PixelWorldEngine::Graphics::Graphics::SetStaticSampler(StaticSampler * staticSampler, int id)
+{
+#ifdef _WIN32
+
+	deviceContext->VSSetSamplers(id, 1, &staticSampler->sampler);
+	deviceContext->PSSetSamplers(id, 1, &staticSampler->sampler);
+
+#endif // _WIN32
+
+}
+
 void PixelWorldEngine::Graphics::Graphics::SetConstantBuffers(std::vector<Buffer*> buffer, int startID)
 {
 
@@ -154,6 +170,24 @@ void PixelWorldEngine::Graphics::Graphics::SetShaderResources(std::vector<Shader
 
 }
 
+void PixelWorldEngine::Graphics::Graphics::SetStaticSampelrs(std::vector<StaticSampler*> staticSampler, int startID)
+{
+
+#ifdef _WIN32
+
+	std::vector<ID3D11SamplerState*> staticSamplers(staticSampler.size());
+
+	for (size_t i = 0; i < staticSampler.size(); i++)
+		staticSamplers[i] = staticSampler[i]->sampler;
+
+	deviceContext->VSSetSamplers(startID, staticSampler.size(), &staticSamplers[0]);
+	deviceContext->PSSetSamplers(startID, staticSampler.size(), &staticSamplers[0]);
+
+
+#endif // _WIN32
+
+}
+
 void PixelWorldEngine::Graphics::Graphics::SetRenderTarget(RenderTarget* renderTarget)
 {
 
@@ -165,8 +199,11 @@ void PixelWorldEngine::Graphics::Graphics::SetRenderTarget(RenderTarget* renderT
 
 }
 
-void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode fillMode)
+void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode FillMode)
 {
+	if (fillMode == FillMode) return;
+
+	fillMode = FillMode;
 
 #ifdef _WIN32
 	Utility::Dipose(rasterizerState);
@@ -182,12 +219,15 @@ void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode fillMode)
 
 void PixelWorldEngine::Graphics::Graphics::SetBlendState(bool state)
 {
+	if (blendEnable == state) return;
 	
+	blendEnable = state;
+
 #ifdef _WIN32
 
 	Utility::Dipose(blendState);
 
-	blendDesc.RenderTarget[0].BlendEnable = state;
+	blendDesc.RenderTarget[0].BlendEnable = blendEnable;
 
 	device->CreateBlendState(&blendDesc, &blendState);
 
@@ -215,6 +255,11 @@ void PixelWorldEngine::Graphics::Graphics::SetViewPort(Rectangle rect)
 
 #endif // _WIN32
 
+}
+
+void PixelWorldEngine::Graphics::Graphics::ClearState()
+{
+	deviceContext->ClearState();
 }
 
 void PixelWorldEngine::Graphics::Graphics::DrawIndexed(int indexCount, int startIndexLocation, int baseVertexLocation)

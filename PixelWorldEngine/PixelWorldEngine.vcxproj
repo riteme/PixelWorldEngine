@@ -36,6 +36,7 @@
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="GraphicsShader.hpp" />
     <ClInclude Include="ShaderResource.hpp" />
+    <ClInclude Include="StaticSampler.hpp" />
     <ClInclude Include="Utility.hpp" />
     <ClInclude Include="WorldMap.hpp" />
   </ItemGroup>
@@ -51,6 +52,7 @@
     <ClCompile Include="GraphicsShader.cpp" />
     <ClCompile Include="PixelWorld.cpp" />
     <ClCompile Include="ShaderResource.cpp" />
+    <ClCompile Include="StaticSampler.cpp" />
     <ClCompile Include="Utility.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +62,7 @@
     <None Include="PixelWorld.hlsl">
       <FileType>Document</FileType>
     </None>
+    <None Include="ShaderToString.py" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

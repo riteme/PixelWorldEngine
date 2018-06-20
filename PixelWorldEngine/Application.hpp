@@ -32,6 +32,7 @@ namespace PixelWorldEngine {
 
 		Graphics::Buffer* cameraBuffer;
 		Graphics::GraphicsShader* defaultShader;
+		Graphics::StaticSampler* defaultSampler;
 
 		PixelWorld* pixelWorld;
 
@@ -71,13 +72,15 @@ namespace PixelWorldEngine {
 		void OnProcessMessage(MSG message);
 #endif // _WIN32
 
-
+		static auto ComputeViewPort(int windowWidth, int windowHeight, int resolutionWidth, int resolutionHeight) -> Rectangle;
 	public:
 		Application(const wchar_t* ApplicationName);
 
 		~Application();
 
 		void MakeWindow(const wchar_t* WindowName, int Width, int Height, const wchar_t* IconName = L"");
+
+		void MakeFullScreen(bool state);
 
 		void ShowWindow();
 

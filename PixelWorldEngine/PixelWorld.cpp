@@ -75,6 +75,8 @@ auto PixelWorldEngine::PixelWorld::GetCurrentWorld() -> Graphics::Texture2D *
 {
 	renderTarget->Clear(0, 0, 0);
 
+	graphics->ClearState();
+
 	graphics->SetRenderTarget(renderTarget);
 	
 	graphics->SetViewPort(Rectangle(0.f, 0.f, (float)resolutionWidth, (float)resolutionHeight));

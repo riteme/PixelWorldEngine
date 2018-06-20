@@ -2,25 +2,32 @@
 
 #include "EngineDefaultResource.hpp"
 
+#ifdef _DEBUG
+
+#include <iostream>
+
+#endif // _DEBUG
+
+
 #ifdef _WIN32
 
 #define KEYDOWN(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 1 : 0)
 #define KEYUP(vk_code) ((GetAsyncKeyState(vk_code) & 0x8000) ? 0 : 1)
 
-bool sizeChange = false;
-
-int newWidth;
-int newHeight;
+PixelWorldEngine::Application* self;
 
 LRESULT PixelWorldEngine::Application::DefaultWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 	case WM_SIZE: {
-		sizeChange = true;
 
-		newWidth = LOWORD(lParam);
-		newHeight = HIWORD(lParam);
+		auto eventArg = &Events::SizeChangeEvent();
+
+		eventArg->width = LOWORD(lParam);
+		eventArg->height = HIWORD(lParam);
+
+		self->OnSizeChange(self, eventArg);
 
 		break;
 	}
@@ -61,6 +68,14 @@ void PixelWorldEngine::Application::OnSizeChange(void * sender, PixelWorldEngine
 {
 	windowWidth = eventArg->width;
 	windowHeight = eventArg->height;
+	
+	Utility::Delete(renderTarget);
+
+#ifdef _WIN32
+	swapChain->ResizeBuffers(1, windowWidth, windowHeight, (DXGI_FORMAT)Graphics::PixelFormat::Unknown, 0);
+#endif // _WIN32
+
+	renderTarget = new Graphics::RenderTarget(graphics, this);
 }
 
 void PixelWorldEngine::Application::OnUpdate(void * sender)
@@ -70,17 +85,24 @@ void PixelWorldEngine::Application::OnUpdate(void * sender)
 
 void PixelWorldEngine::Application::OnRender(void * sender)
 {
+
 	auto worldTexture = pixelWorld->GetCurrentWorld();
 
-	auto matrix = Camera(Rectangle(0.f, 0.f, (float)worldTexture->GetWidth(), (float)worldTexture->GetHeight())).GetMatrix();
+	auto resolutionWidth = worldTexture->GetWidth();
+	auto resolutionHeight = worldTexture->GetHeight();
+
+	auto matrix = Camera(Rectangle(0.f, 0.f, (float)resolutionWidth, (float)resolutionHeight)).GetMatrix();
 
 	cameraBuffer->Update(&matrix);
 
 	renderTarget->Clear(0, 0, 0);
 
+	graphics->ClearState();
+
 	graphics->SetRenderTarget(renderTarget);
 
-	graphics->SetViewPort(Rectangle(0.f, 0.f, (float)windowWidth, (float)windowHeight));
+	graphics->SetViewPort(Application::ComputeViewPort(windowWidth, windowHeight,
+		resolutionWidth, resolutionHeight));
 
 	graphics->SetShader(defaultShader);
 
@@ -89,12 +111,13 @@ void PixelWorldEngine::Application::OnRender(void * sender)
 
 	graphics->SetConstantBuffer(cameraBuffer, 0);
 	graphics->SetShaderResource(worldTexture, 0);
+	graphics->SetStaticSampler(defaultSampler, 0);
 
 	graphics->DrawIndexed(pixelWorld->renderObject->GetIndexBuffer()->GetCount());
 
 #ifdef _WIN32
 
-	swapChain->Present(0, 0);
+	auto result = swapChain->Present(0, 0);
 
 #endif // _WIN32
 
@@ -239,21 +262,44 @@ void PixelWorldEngine::Application::OnProcessMessage(MSG message)
 	default:
 		break;
 	}
-
-	if (sizeChange == true) {
-		auto eventArg = &Events::SizeChangeEvent();
-
-		eventArg->width = newWidth;
-		eventArg->height = newHeight;
-
-		OnSizeChange(this, eventArg);
-
-		sizeChange = false;
-	}
 }
 
 #endif // _WIN32
 
+
+auto PixelWorldEngine::Application::ComputeViewPort(int windowWidth, int windowHeight, int resolutionWidth, int resolutionHeight) -> Rectangle
+{
+	if (windowWidth * resolutionHeight == windowHeight * resolutionWidth) return Rectangle(0, 0, (float)windowWidth, (float)windowHeight);
+
+	float Tx = (float)resolutionWidth;
+	float Ty = (float)resolutionHeight;
+
+	float x = (float)windowWidth;
+	float  y = (float)windowHeight;
+
+	float scaleWidth = 0;
+	float scaleHeight = 0;
+
+	float offX = 0;
+	float offY = 0;
+
+	if (Ty * x > Tx * y) {
+		//for width
+		scaleWidth = windowWidth / ((Ty * x) / (Tx * y));
+		scaleHeight = (float)windowHeight;
+
+		offX = (windowWidth - scaleWidth) / 2.f;
+	}
+	else {
+		//for height
+		scaleWidth = (float)windowWidth;
+		scaleHeight = windowHeight * ((Ty * x) / (Tx * y));
+
+		offY = (windowHeight - scaleHeight) / 2.f;
+	}
+
+	return Rectangle(offX, offY, offX + scaleWidth, offY + scaleHeight);
+}
 
 PixelWorldEngine::Application::Application(const wchar_t * ApplicationName)
 {
@@ -265,6 +311,8 @@ PixelWorldEngine::Application::Application(const wchar_t * ApplicationName)
 	
 	defaultShader = new Graphics::GraphicsShader(graphics, 
 		Utility::CharArrayToVector((char*)&ApplicationDefaultShaderCode[0]));
+
+	defaultSampler = new Graphics::StaticSampler(graphics);
 
 #ifdef _WIN32
 	ImmDisableIME(0);
@@ -280,6 +328,7 @@ PixelWorldEngine::Application::~Application()
 	Utility::Delete(cameraBuffer);
 
 	Utility::Delete(defaultShader);
+	Utility::Delete(defaultSampler);
 
 	Utility::Delete(renderTarget);
 	Utility::Delete(graphics);
@@ -308,6 +357,7 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 		SetWindowPos(hwnd, nullptr, 0, 0, rect.right - rect.left, rect.bottom - rect.top,
 			SWP_NOZORDER ^ SWP_NOMOVE);
+
 #endif // _WIN32
 
 #ifdef LIUNX
@@ -322,7 +372,7 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 		WNDCLASS appInfo;
 
-		appInfo.style = CS_HREDRAW | CS_VREDRAW;
+		appInfo.style = CS_DBLCLKS;
 		appInfo.lpfnWndProc = DefaultWindowProc;
 		appInfo.cbClsExtra = 0;
 		appInfo.cbWndExtra = 0;
@@ -357,7 +407,7 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 		swapDesc.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER::DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		swapDesc.BufferDesc.Width = windowWidth;
 		swapDesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-		swapDesc.Flags = DXGI_SWAP_CHAIN_FLAG::DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
+		swapDesc.Flags = 0;
 		swapDesc.OutputWindow = hwnd;
 		swapDesc.SampleDesc.Count = 1;
 		swapDesc.SampleDesc.Quality = 0;
@@ -377,6 +427,8 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 		Utility::Dipose(device);
 		Utility::Dipose(adapter);
 		Utility::Dipose(factory);
+
+		self = this;
 #endif // _WIN32
 
 #ifdef LIUNX
@@ -388,6 +440,16 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 		isWindowCreated = true;
 	}
+}
+
+void PixelWorldEngine::Application::MakeFullScreen(bool state)
+{
+#ifdef _WIN32
+
+	swapChain->SetFullscreenState(state, nullptr);
+
+#endif // _WIN32
+
 }
 
 void PixelWorldEngine::Application::ShowWindow()
@@ -427,6 +489,7 @@ void PixelWorldEngine::Application::RunLoop()
 
 #ifdef _WIN32
 		MSG message;
+		message.hwnd = hwnd;
 
 		if (PeekMessage(&message, 0, 0, 0, PM_REMOVE)) {
 			TranslateMessage(&message);

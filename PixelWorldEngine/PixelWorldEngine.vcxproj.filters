@@ -93,6 +93,9 @@
     <ClInclude Include="EngineDefaultResource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="StaticSampler.hpp">
+      <Filter>Header Files\Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Utility.cpp">
@@ -131,12 +134,18 @@
     <ClCompile Include="DataManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="StaticSampler.cpp">
+      <Filter>Source Files\Graphics</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Application.hlsl">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="PixelWorld.hlsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ShaderToString.py">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

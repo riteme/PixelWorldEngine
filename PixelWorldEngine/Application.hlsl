@@ -21,12 +21,7 @@ cbuffer Camera : register(b0)
 
 Texture2D Texture : register(t0);
 
-SamplerState sample
-{
-    Filter = MIN_MAG_MIP_LINEAR;
-    AddressU = CLAMP;
-    AddressV = CLAMP;
-};
+SamplerState sample : register(s0);
 
 OutputData vs_main(InputData input)
 {

@@ -6,6 +6,7 @@
 #include "DebugLayer.hpp"
 
 #include "GraphicsEnum.hpp"
+#include "StaticSampler.hpp"
 #include "GraphicsShader.hpp"
 #include "BufferResource.hpp"
 #include "ShaderResource.hpp"
@@ -23,6 +24,9 @@ namespace PixelWorldEngine {
 		class Graphics {
 		private:
 			int resolutionWidth, resolutionHeight;
+
+			FillMode fillMode;
+			bool blendEnable;
 		public:
 
 #ifdef _WIN32
@@ -54,9 +58,13 @@ namespace PixelWorldEngine {
 
 			void SetShaderResource(ShaderResource* shaderResource, int id);
 
+			void SetStaticSampler(StaticSampler* staticSampler, int id);
+
 			void SetConstantBuffers(std::vector<Buffer*> buffer, int startID);
 
 			void SetShaderResources(std::vector<ShaderResource*> shaderResource, int startID);
+
+			void SetStaticSampelrs(std::vector<StaticSampler*> staticSampler, int startID);
 
 			void SetRenderTarget(RenderTarget* renderTarget);
 	
@@ -68,6 +76,8 @@ namespace PixelWorldEngine {
 
 			//表示整个后台缓冲中可见的范围
 			void SetViewPort(PixelWorldEngine::Rectangle rect);
+
+			void ClearState();
 
 			void DrawIndexed(int indexCount, int startIndexLocation = 0, int baseVertexLocation = 0);
 
