@@ -1,9 +1,6 @@
+#pragma once
+
 #include "pch.hpp"
-
-#ifndef _DEBUGLAYER_H_
-#define _DEBUGLAYER_H_
-
-#define MAX_ERROR_TEXT 100
 
 namespace PixelWorldEngine {
 
@@ -11,12 +8,14 @@ namespace PixelWorldEngine {
 		//There are more than one application.
 		MoreThanOneInstance,
 		TheDataIsNull,
+		ShaderCompiledFailed,
 		Count
 	};
 
 	static const char* messageTemplate[(int)Error::Count] = {
 		"There are more than one instance.",
-		"The data is null."
+		"The data is null.",
+		"The shader was compiled failed. Code : %s"
 	};
 
 	class DebugLayer {
@@ -32,4 +31,3 @@ namespace PixelWorldEngine {
 	};
 
 }
-#endif // !_DEBUGLAYER_H_

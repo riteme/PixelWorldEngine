@@ -1,11 +1,16 @@
-#ifndef _PCH_H_
-#define _PCH_H_
-
+#pragma once
 
 #include <string>
 #include <vector>
+#include <map>
+#include <fstream>
 
-#ifdef WINDOWS
+namespace PixelWorldEngine {
+
+	typedef unsigned char byte;
+
+}
+#ifdef _WIN32
 
 #include <Windows.h>
 #include <windowsx.h>
@@ -15,13 +20,9 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "d3dcompiler.lib")
+#pragma comment(lib,"Imm32.lib")
 
-#endif // _WINDOWS_
+#endif // _WIN32
 
 #ifdef DEBUG
-
-#include <iostream>
-
 #endif
-
-#endif // !_PCH_H_

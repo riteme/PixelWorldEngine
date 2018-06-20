@@ -3,9 +3,9 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Height, PixelFormat PixelFormat, int MipLevels)
+PixelWorldEngine::Graphics::Texture2D::Texture2D(Graphics* Graphics, void * Data, int Width, int Height, PixelFormat PixelFormat, int MipLevels)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	width = Width;
 	height = Height;
@@ -16,10 +16,10 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 	rowPitch = width * Utility::CountPixelFormatSize(pixelFormat);
 	size = rowPitch * height;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	desc.ArraySize = 1;
-	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE;
+	desc.BindFlags = D3D11_BIND_FLAG::D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_FLAG::D3D11_BIND_RENDER_TARGET;
 	desc.CPUAccessFlags = 0;
 	desc.Format = (DXGI_FORMAT)pixelFormat;
 	desc.Height = height;
@@ -40,7 +40,7 @@ PixelWorldEngine::Graphics::Texture2D::Texture2D(void * Data, int Width, int Hei
 
 	graphics->device->CreateShaderResourceView(resource, &desc, &resourceView);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 	Update(Data);
 }
@@ -52,12 +52,14 @@ PixelWorldEngine::Graphics::Texture2D::~Texture2D()
 
 void PixelWorldEngine::Graphics::Texture2D::Update(void * data)
 {
-#ifdef WINDOWS
+	if (data == nullptr) return;
+
+#ifdef _WIN32
 
 	graphics->deviceContext->UpdateSubresource(resource,
 		0, nullptr, data, rowPitch, 0);
 
-#endif // WINDOWS
+#endif // _WIN32
 }
 
 auto PixelWorldEngine::Graphics::Texture2D::GetWidth() -> int
@@ -87,9 +89,9 @@ auto PixelWorldEngine::Graphics::Texture2D::GetPixelFormat() -> PixelFormat
 
 PixelWorldEngine::Graphics::ShaderResource::~ShaderResource()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(resource);
 	Utility::Dipose(resourceView);
-#endif // WINDOWS
+#endif // _WIN32
 
 }

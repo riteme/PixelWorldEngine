@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICSSHADER_H_
-#define _GRAPHICSSHADER_H_
+#include "pch.hpp"
 
 #include "BaseStruct.hpp"
 
@@ -18,17 +17,17 @@ namespace PixelWorldEngine {
 			std::vector<byte> compiledVertexShaderCode;
 			std::vector<byte> compiledPixelShaderCode;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			ID3D11VertexShader* vertexShader;
 			ID3D11PixelShader* pixelShader;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
-			GraphicsShader(std::vector<byte> ShaderCode,
+			GraphicsShader(Graphics* graphics, std::vector<byte> ShaderCode,
 				const char* VertexShaderFunction = "vs_main", const char* PixelShaderFunction = "ps_main");
 
-			GraphicsShader(std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode);
+			GraphicsShader(Graphics* graphics, std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode);
 
 			auto GetVertexShaderCode() -> std::vector<byte>;
 
@@ -40,5 +39,3 @@ namespace PixelWorldEngine {
 	}
 
 }
-
-#endif // !_GRAPHICSSHADER_H_

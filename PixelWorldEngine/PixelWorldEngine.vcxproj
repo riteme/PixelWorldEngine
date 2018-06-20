@@ -22,27 +22,47 @@
     <ClInclude Include="Application.hpp" />
     <ClInclude Include="BaseStruct.hpp" />
     <ClInclude Include="BufferResource.hpp" />
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="EngineDefaultResource.hpp" />
+    <ClInclude Include="Geometry.hpp" />
+    <ClInclude Include="DataManager.hpp" />
     <ClInclude Include="DebugLayer.hpp" />
     <ClInclude Include="GraphicsEnum.hpp" />
     <ClInclude Include="Events.hpp" />
     <ClInclude Include="Graphics.hpp" />
     <ClInclude Include="GraphicsRenderTarget.hpp" />
     <ClInclude Include="KeyCode.hpp" />
+    <ClInclude Include="PixelWorld.hpp" />
     <ClInclude Include="pch.hpp" />
     <ClInclude Include="GraphicsShader.hpp" />
     <ClInclude Include="ShaderResource.hpp" />
+    <ClInclude Include="StaticSampler.hpp" />
     <ClInclude Include="Utility.hpp" />
+    <ClInclude Include="WorldMap.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="BufferResource.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DataManager.cpp" />
     <ClCompile Include="DebugLayer.cpp" />
-    <ClCompile Include="Events.cpp" />
+    <ClCompile Include="Geometry.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GraphicsRenderTarget.cpp" />
     <ClCompile Include="GraphicsShader.cpp" />
+    <ClCompile Include="PixelWorld.cpp" />
     <ClCompile Include="ShaderResource.cpp" />
+    <ClCompile Include="StaticSampler.cpp" />
     <ClCompile Include="Utility.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Application.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="PixelWorld.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="ShaderToString.py" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -102,7 +122,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>WINDOWS;DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _APPLICATION_H_
-#define _APPLICATION_H_
+#include "pch.hpp"
 
 #include "KeyCode.hpp"
 #include "Events.hpp"
@@ -9,42 +8,50 @@
 #include "Graphics.hpp"
 #include "GraphicsRenderTarget.hpp"
 
+#include "PixelWorld.hpp"
+
 namespace PixelWorldEngine {
 
 	class Application {
 	private:
-		wchar_t* applicationName;
+		std::wstring applicationName;
 
 		int windowWidth = 0;
 		int windowHeight = 0;
 
-		wchar_t* windowName;
-		wchar_t* iconName;
+		std::wstring windowName;
+		std::wstring iconName;
 
 		bool isWindowCreated = false;
 
 		int mousePositionX;
 		int mousePositionY;
 
-		Graphics::Graphics graphics;
+		Graphics::Graphics* graphics;
 		Graphics::RenderTarget* renderTarget;
 
-#ifdef WINDOWS
+		Graphics::Buffer* cameraBuffer;
+		Graphics::GraphicsShader* defaultShader;
+		Graphics::StaticSampler* defaultSampler;
+
+		PixelWorld* pixelWorld;
+
+#ifdef _WIN32
 		HWND hwnd = nullptr;
 
 		static LRESULT CALLBACK DefaultWindowProc(HWND hWnd, UINT message,
 			WPARAM wParam, LPARAM lParam);
-#endif // WINDOWS
+#endif // _WIN32
 
 	public:
 
-#ifdef WINDOWS
+#ifdef _WIN32
+		DXGI_SWAP_CHAIN_DESC swapDesc;
 
 		IDXGISwapChain* swapChain;
 
-		DXGI_SWAP_CHAIN_DESC swapDesc;
 
-#endif //WINDOWS
+#endif //_WIN32
 
 	private:
 		void OnMouseMove(void* sender, PixelWorldEngine::Events::MouseMoveEvent* eventArg);
@@ -58,6 +65,14 @@ namespace PixelWorldEngine {
 		void OnSizeChange(void* sender, PixelWorldEngine::Events::SizeChangeEvent* eventArg);
 
 		void OnUpdate(void* sender);
+
+		void OnRender(void* sender);
+
+#ifdef _WIN32
+		void OnProcessMessage(MSG message);
+#endif // _WIN32
+
+		static auto ComputeViewPort(int windowWidth, int windowHeight, int resolutionWidth, int resolutionHeight) -> Rectangle;
 	public:
 		Application(const wchar_t* ApplicationName);
 
@@ -65,21 +80,21 @@ namespace PixelWorldEngine {
 
 		void MakeWindow(const wchar_t* WindowName, int Width, int Height, const wchar_t* IconName = L"");
 
+		void MakeFullScreen(bool state);
+
 		void ShowWindow();
 
 		void HideWindow();
 
 		void RunLoop();
 
+		void SetWorld(PixelWorld* pixelWorld);
+
 		auto GetWindowWidth() -> int;
 
 		auto GetWindowHeight() -> int;
 
-		static void SetInstance(Application* application);
-
-		static auto GetGraphicsInstance() -> Graphics::Graphics*;
+		auto GetGraphics() -> Graphics::Graphics*;
 	};
 
 }
-
-#endif // !_APPLICATION_H_

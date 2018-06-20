@@ -3,17 +3,20 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> ShaderCode,
+
+PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> ShaderCode,
 	const char * VertexShaderFunction, const char * PixelShaderFunction)
 {
-	graphics = Application::GetGraphicsInstance();
+	//没有编译过的着色器
+
+	graphics = Graphics;
 	
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	ID3DBlob* result;
 	ID3DBlob* error;
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	UINT flag = D3DCOMPILE_DEBUG;
 #else
 	UINT flag = D3DCOMPILE_OPTIMIZATION_LEVEL2;
@@ -23,11 +26,13 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Sha
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, VertexShaderFunction, "vs_5_0", flag, 0,
 		&result, &error);
 
+	//DebugLayer::Assert(true, Error::ShaderCompiledFailed, error->GetBufferPointer());
+
 	graphics->device->CreateVertexShader(result->GetBufferPointer(), result->GetBufferSize(),
 		nullptr, &vertexShader);
 
 	for (size_t i = 0; i < result->GetBufferSize(); i++) 
-		compiledPixelShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
+		compiledVertexShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 	
 	Utility::Dipose(result);
 	Utility::Dipose(error);
@@ -45,14 +50,16 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Sha
 	Utility::Dipose(result);
 	Utility::Dipose(error);
 
-#endif // WINDOWS
+#endif // _WIN32
 }
 
-PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode)
+PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, std::vector<byte> VertexShaderCode, std::vector<byte> PixelShaderCode)
 {
-	graphics = Application::GetGraphicsInstance();
+	//已经编译过的着色器
 
-#ifdef WINDOWS
+	graphics = Graphics;
+
+#ifdef _WIN32
 
 	graphics->device->CreateVertexShader(&VertexShaderCode[0], VertexShaderCode.size(),
 		nullptr, &vertexShader);
@@ -60,7 +67,7 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(std::vector<byte> Ver
 	graphics->device->CreatePixelShader(&PixelShaderCode[0], PixelShaderCode.size(),
 		nullptr, &pixelShader);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 	compiledVertexShaderCode = std::vector<byte>(VertexShaderCode);
 	compiledPixelShaderCode = std::vector<byte>(PixelShaderCode);
@@ -79,9 +86,9 @@ auto PixelWorldEngine::Graphics::GraphicsShader::GetPixelShaderCode() -> std::ve
 
 PixelWorldEngine::Graphics::GraphicsShader::~GraphicsShader()
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(vertexShader);
 	Utility::Dipose(pixelShader);
-#endif // WINDOWS
+#endif // _WIN32
 
 }

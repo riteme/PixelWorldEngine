@@ -1,6 +1,15 @@
 #include "DebugLayer.hpp"
 #include "Utility.hpp"
 
+#ifdef _DEBUG
+
+#include <iostream>
+
+#endif // _DEBUG
+
+#define MAX_ERROR_TEXT 1000
+
+
 auto PixelWorldEngine::DebugLayer::GetErrorMessage(Error error, va_list args) -> std::string
 {
 	char result[MAX_ERROR_TEXT];
@@ -12,7 +21,9 @@ auto PixelWorldEngine::DebugLayer::GetErrorMessage(Error error, va_list args) ->
 
 void PixelWorldEngine::DebugLayer::ReportMessage(std::string message) 
 {
+#ifdef _DEBUG
 	std::cout << message << std::endl;
+#endif // DEBUG
 }
 
 void PixelWorldEngine::DebugLayer::ReportError(Error error, ...)

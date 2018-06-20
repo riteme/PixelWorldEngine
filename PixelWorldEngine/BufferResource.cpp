@@ -3,15 +3,15 @@
 #include "Application.hpp"
 #include "Graphics.hpp"
 
-PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCount, BufferType bufferType)
+PixelWorldEngine::Graphics::Buffer::Buffer(Graphics* Graphics, void * data, int dataSize, int dataCount, BufferType bufferType)
 {
-	graphics = Application::GetGraphicsInstance();
+	graphics = Graphics;
 
 	size = dataSize;
 	count = dataCount;
 	type = bufferType;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 
 	
 	desc.BindFlags = (D3D11_BIND_FLAG)type;
@@ -23,21 +23,23 @@ PixelWorldEngine::Graphics::Buffer::Buffer(void * data, int dataSize, int dataCo
 
 	graphics->device->CreateBuffer(&desc, nullptr, &buffer);
 
-#endif // WINDOWS
+#endif // _WIN32
 
 	Update(data);
 }
 
 PixelWorldEngine::Graphics::Buffer::~Buffer() 
 {
-#ifdef WINDOWS
+#ifdef _WIN32
 	Utility::Dipose(buffer);
-#endif // WINDOWS
+#endif // _WIN32
 
 }
 
 void PixelWorldEngine::Graphics::Buffer::Update(void * data)
 {
+	if (data == nullptr) return;
+
 	graphics->deviceContext->UpdateSubresource(buffer, 0, nullptr,
 		data, 0, 0);
 }

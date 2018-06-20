@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _GRAPHICSRENDERTARGET_H_
-#define _GRAPHICSRENDERTARGET_H_
+#include "pch.hpp"
 
 #include "GraphicsEnum.hpp"
 #include "ShaderResource.hpp"
@@ -22,15 +21,15 @@ namespace PixelWorldEngine {
 
 			PixelFormat pixelFormat;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			ID3D11RenderTargetView* renderTarget;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
-			RenderTarget(Texture2D* texture);
+			RenderTarget(Graphics* graphics, Texture2D* texture);
 
-			RenderTarget(Application* application);
+			RenderTarget(Graphics* graphics, Application* application);
 
 			~RenderTarget();
 
@@ -46,5 +45,3 @@ namespace PixelWorldEngine {
 	}
 
 }
-
-#endif // !_GRAPHICSRENDERTARGET_H_

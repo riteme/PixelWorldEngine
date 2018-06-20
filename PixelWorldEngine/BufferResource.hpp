@@ -1,7 +1,6 @@
-#include "pch.hpp"
+#pragma once
 
-#ifndef _BUFFERRESOURCE_H_
-#define _BUFFERRESOURCE_H_
+#include "pch.hpp"
 
 namespace PixelWorldEngine {
 
@@ -24,15 +23,15 @@ namespace PixelWorldEngine {
 
 			BufferType type;
 
-#ifdef WINDOWS
+#ifdef _WIN32
 		public:
 			D3D11_BUFFER_DESC desc;
 
 			ID3D11Buffer* buffer;
-#endif // WINDOWS
+#endif // _WIN32
 
 		public:
-			Buffer(void* data, int dataSize, int dataCount = 1, BufferType bufferType = BufferType::ConstantBuffer);
+			Buffer(Graphics* graphics, void* data, int dataSize, int dataCount = 1, BufferType bufferType = BufferType::ConstantBuffer);
 			
 			~Buffer();
 
@@ -46,5 +45,3 @@ namespace PixelWorldEngine {
 		};
 	}
 }
-
-#endif // !_BUFFERRESOURCE_H_
