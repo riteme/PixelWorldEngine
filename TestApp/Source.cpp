@@ -18,11 +18,13 @@ using namespace PixelWorldEngine::Graphics;
 
 Application application = Application(L"Application");
 PixelWorld pixelWorld = PixelWorld(L"PixelWorld", &application);
+DataManager dataManger = DataManager(&application);
 
 int main() {
-
+	auto texture = dataManger.RegisterTexture(L"C:/Users/LinkC/Pictures/T1.jpg");
 	pixelWorld.SetResolution(1920, 1080);
 	pixelWorld.SetCamera(Camera(PixelWorldEngine::Rectangle(0, 0, 1920, 1080)));
+	pixelWorld.RegisterRenderObjectID(0, texture);
 
 	application.MakeWindow(L"TestApp", 1920, 1080);
 	application.SetWorld(&pixelWorld);

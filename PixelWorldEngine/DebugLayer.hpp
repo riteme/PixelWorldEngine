@@ -9,13 +9,15 @@ namespace PixelWorldEngine {
 		MoreThanOneInstance,
 		TheDataIsNull,
 		ShaderCompiledFailed,
+		FormatIsNotSupported,
 		Count
 	};
 
 	static const char* messageTemplate[(int)Error::Count] = {
 		"There are more than one instance.",
 		"The data is null.",
-		"The shader was compiled failed. Code : %s"
+		"The shader was compiled failed. Code : %s",
+		"The file (%s) format is not supported."
 	};
 
 	class DebugLayer {

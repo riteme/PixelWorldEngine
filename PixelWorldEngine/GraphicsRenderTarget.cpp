@@ -50,7 +50,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Appli
 
 	graphics->device->CreateRenderTargetView(backBuffer, &viewDesc, &renderTarget);
 
-	Utility::Dipose(backBuffer);
+	Utility::Dispose(backBuffer);
 #endif // _WIN32
 
 }
@@ -58,7 +58,7 @@ PixelWorldEngine::Graphics::RenderTarget::RenderTarget(Graphics* Graphics, Appli
 PixelWorldEngine::Graphics::RenderTarget::~RenderTarget()
 {
 #ifdef _WIN32
-	Utility::Dipose(renderTarget);
+	Utility::Dispose(renderTarget);
 #endif // _WIN32
 }
 

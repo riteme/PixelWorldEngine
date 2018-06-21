@@ -90,8 +90,8 @@ auto PixelWorldEngine::Graphics::Texture2D::GetPixelFormat() -> PixelFormat
 PixelWorldEngine::Graphics::ShaderResource::~ShaderResource()
 {
 #ifdef _WIN32
-	Utility::Dipose(resource);
-	Utility::Dipose(resourceView);
+	Utility::Dispose(resource);
+	Utility::Dispose(resourceView);
 #endif // _WIN32
 
 }

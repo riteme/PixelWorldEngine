@@ -73,6 +73,8 @@ namespace PixelWorldEngine {
 #endif // _WIN32
 
 		static auto ComputeViewPort(int windowWidth, int windowHeight, int resolutionWidth, int resolutionHeight) -> Rectangle;
+
+		static auto ComputeMousePosition(Rectangle ViewPort, int resolutionWidth, int resolutionHeight, int x, int y)->std::pair<int, int>;
 	public:
 		Application(const wchar_t* ApplicationName);
 

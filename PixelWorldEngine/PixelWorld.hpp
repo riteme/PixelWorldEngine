@@ -45,7 +45,9 @@ namespace PixelWorldEngine {
 		Graphics::Rectangle* square; //正方形
 		Graphics::Rectangle* renderObject; //画布
 
-		std::map<int, Graphics::Texture2D> renderObjectIDGroup; //用于存储纹理，不同的ID对应不同的纹理
+		Graphics::StaticSampler* defaultSampler; //默认的采样器
+
+		std::map<int, Graphics::Texture2D*> renderObjectIDGroup; //用于存储纹理，不同的ID对应不同的纹理
 
 		friend class Application;
 	public:
@@ -88,9 +90,9 @@ namespace PixelWorldEngine {
 		/**
 		 * @brief 注册一个渲染物体，注册完成后文件数据就可以释放了
 		 * @param[in] id 我们注册的渲染物体的ID
-		 * @param[in] fileData 渲染物体的数据信息
+		 * @param[in] fileData 渲染物体的数据信息，注意数据必须是数据格式R8G8B8A8，然后图形的长宽必须一样
 		 */
-		void RegisterRenderObjectID(int id, byte* fileData);
+		void RegisterRenderObjectID(int id, Graphics::Texture2D* texture);
 
 		/**
 		 * @brief 释放我们注册过的渲染物体

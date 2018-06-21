@@ -63,7 +63,7 @@ PixelWorldEngine::Graphics::StaticSampler::StaticSampler(Graphics* Graphics, Tex
 PixelWorldEngine::Graphics::StaticSampler::~StaticSampler()
 {
 #ifdef _WIN32
-	Utility::Dipose(sampler);
+	Utility::Dispose(sampler);
 #endif // _WIN32
 
 }

@@ -17,14 +17,14 @@ namespace PixelWorldEngine {
 		static auto CountPixelFormatSize(Graphics::PixelFormat pixelFormat) -> int;
 
 		template<typename T>
-		static void Dipose(T &object);
+		static void Dispose(T &object);
 
 		template<typename T>
 		static void Delete(T &object);
 	};
 
 	template<typename T>
-	inline void Utility::Dipose(T & object)
+	inline void Utility::Dispose(T & object)
 	{
 		if (object != nullptr)
 			object->Release();

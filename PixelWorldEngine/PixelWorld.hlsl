@@ -24,6 +24,10 @@ cbuffer Transform : register(b1)
     matrix world;
 };
 
+Texture2D Texture0 : register(t0);
+
+SamplerState sampler0 : register(s0);
+
 OutputData vs_main(InputData input)
 {
     OutputData result;
@@ -39,5 +43,5 @@ OutputData vs_main(InputData input)
 
 float4 ps_main(OutputData input) : SV_TARGET
 {
-    return float4(1, 1, 1, 1);
+    return Texture0.Sample(sampler0, input.tex0);
 }
