@@ -1,5 +1,15 @@
 #include "DataManager.hpp"
 
+#include "Application.hpp"
+
+#include <SDL2\SDL_image.h>
+
+#ifdef _WIN32
+#pragma comment(lib, "SDL2.lib")
+#pragma comment(lib, "SDL2_Image.lib")
+#endif // _WIN32
+
+
 PixelWorldEngine::FileData::FileData(byte * Data)
 {
 	if (Data == nullptr) return;
@@ -27,6 +37,18 @@ auto PixelWorldEngine::FileData::GetVector() -> std::vector<byte>
 	return std::vector<byte>(data);
 }
 
+PixelWorldEngine::DataManager::DataManager(Application* application)
+{
+	graphics = application->GetGraphics();
+
+	IMG_Init(IMG_InitFlags::IMG_INIT_JPG | IMG_InitFlags::IMG_INIT_PNG);
+}
+
+PixelWorldEngine::DataManager::~DataManager()
+{
+	IMG_Quit();
+}
+
 auto PixelWorldEngine::DataManager::ReadFile(std::wstring fileName) -> FileData
 {
 	FileData result;
@@ -49,9 +71,47 @@ auto PixelWorldEngine::DataManager::ReadFile(std::wstring fileName) -> FileData
 
 auto PixelWorldEngine::DataManager::RegisterTexture(std::wstring fileName) -> Graphics::Texture2D *
 {
-	return nullptr;
+	if (textures[fileName] != nullptr) return textures[fileName];
+
+	auto file = ReadFile(fileName);
+	auto SDL_Rw = SDL_RWFromMem(file.GetData(), file.GetSize());
+
+	SDL_Surface* SDL_image = nullptr;
+
+	if ((bool)IMG_isBMP(SDL_Rw) == true) 
+		SDL_image = IMG_LoadBMP_RW(SDL_Rw);
+
+	if ((bool)IMG_isPNG(SDL_Rw) == true)
+		SDL_image = IMG_LoadPNG_RW(SDL_Rw);
+
+	if ((bool)IMG_isJPG(SDL_Rw) == true)
+		SDL_image = IMG_LoadJPG_RW(SDL_Rw);
+
+	DebugLayer::Assert(SDL_image == nullptr, Error::FormatIsNotSupported, fileName);
+
+	SDL_Surface* SDL_resultImage = nullptr;
+
+	if (SDL_image->format->format != SDL_PIXELFORMAT_ARGB8888)
+		SDL_resultImage = SDL_ConvertSurfaceFormat(SDL_image, SDL_PIXELFORMAT_ARGB8888 , 0);
+	else SDL_resultImage = SDL_image;
+
+	auto color = (SDL_Color*)SDL_resultImage->pixels;
+
+	auto texture = new Graphics::Texture2D(graphics, SDL_resultImage->pixels, SDL_resultImage->w, SDL_resultImage->h,
+		Graphics::PixelFormat::R8G8B8A8);
+	
+	textures[fileName] = texture;
+
+	SDL_FreeSurface(SDL_image);
+	SDL_FreeSurface(SDL_resultImage);
+	SDL_FreeRW(SDL_Rw);
+
+	return texture;
 }
 
-auto PixelWorldEngine::DataManager::UnRegisterTexture(Graphics::Texture2D * texture)
+auto PixelWorldEngine::DataManager::UnRegisterTexture(std::wstring fileName)
 {
+	if (textures[fileName] == nullptr) return;
+
+	Utility::Delete(textures[fileName]);
 }

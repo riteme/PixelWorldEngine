@@ -6,6 +6,8 @@
 
 namespace PixelWorldEngine {
 
+	class Application;
+
 	/**
 	 * @brief 文件数据类型，用于存储文件数据
 	 */
@@ -45,7 +47,21 @@ namespace PixelWorldEngine {
 	 */
 	class DataManager {
 	private:
+		Graphics::Graphics* graphics;
+
+		std::map<std::wstring, Graphics::Texture2D*> textures;
 	public:
+		/**
+		 * @breif 构造函数
+		 * @param[in] application
+		 */
+		DataManager(Application* application);
+
+		/**
+		 * @brief 析构函数
+		 */
+		~DataManager();
+		
 		/**
 		 * @brief 读取文件
 		 * @param[in] fileName 文件名
@@ -55,16 +71,16 @@ namespace PixelWorldEngine {
 
 		/**
 		 * @brief 读取纹理资源，并且注册，如果文件已经读取那么不会重复读取而是直接返回纹理
-		 * @param[in] fileName 纹理文件地址
+		 * @param[in] fileName 纹理文件路径，目前只支持bmp, jpeg, png 
 		 * @return 纹理文件
 		 */
 		auto RegisterTexture(std::wstring fileName) -> Graphics::Texture2D*;
 
 		/**
 		 * @brief 释放我们注册的纹理资源，如果一个纹理不需要使用的话建议释放以节约内存
-		 * @param[in] 纹理资源的指针，如果纹理资源并没有通过RegisterTexture读取的话，那么此函数无用
+		 * @param[in] 文件名
 		 */
-		auto UnRegisterTexture(Graphics::Texture2D* texture);
+		auto UnRegisterTexture(std::wstring fileName);
 
 		/**
 		 * @brief 写入文件

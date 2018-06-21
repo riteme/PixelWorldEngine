@@ -45,6 +45,8 @@ namespace PixelWorldEngine {
 		Graphics::Rectangle* square; //正方形
 		Graphics::Rectangle* renderObject; //画布
 
+		Graphics::StaticSampler* defaultSampler; //默认的采样器
+
 		std::map<int, Graphics::Texture2D*> renderObjectIDGroup; //用于存储纹理，不同的ID对应不同的纹理
 
 		friend class Application;
