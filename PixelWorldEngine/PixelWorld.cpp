@@ -71,6 +71,17 @@ void PixelWorldEngine::PixelWorld::SetShader()
 	shader = defaultShader;
 }
 
+void PixelWorldEngine::PixelWorld::RegisterRenderObjectID(int id, Graphics::Texture2D* texture)
+{
+	renderObjectIDGroup.insert(std::pair<int, Graphics::Texture2D*>(id, texture));
+}
+
+void PixelWorldEngine::PixelWorld::UnRegisterRenderObjectID(int id)
+{
+	renderObjectIDGroup.erase(id);
+}
+
+
 auto PixelWorldEngine::PixelWorld::GetCurrentWorld() -> Graphics::Texture2D *
 {
 	renderTarget->Clear(0, 0, 0);
@@ -82,13 +93,6 @@ auto PixelWorldEngine::PixelWorld::GetCurrentWorld() -> Graphics::Texture2D *
 	graphics->SetViewPort(Rectangle(0.f, 0.f, (float)resolutionWidth, (float)resolutionHeight));
 
 	graphics->SetShader(shader);
-
-	graphics->SetVertexBuffer(square->GetVertexBuffer());
-	graphics->SetIndexBuffer(square->GetIndexBuffer());
-	
-	graphics->SetConstantBuffers(buffers, 0);
-
-	graphics->DrawIndexed(square->GetIndexBuffer()->GetCount());
 
 	return renderBuffer;
 }

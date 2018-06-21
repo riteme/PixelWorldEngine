@@ -31,7 +31,6 @@ auto PixelWorldEngine::DataManager::ReadFile(std::wstring fileName) -> FileData
 {
 	FileData result;
 
-#ifdef _DEBUG
 	std::ifstream file;
 
 	file.open(fileName, std::ios::binary | std::ios::ate);
@@ -45,8 +44,14 @@ auto PixelWorldEngine::DataManager::ReadFile(std::wstring fileName) -> FileData
 	file.close();
 
 	return result;
-#else
-	//对于release版本我们会考虑打包文件
-#endif // _DEBUG
 
+}
+
+auto PixelWorldEngine::DataManager::RegisterTexture(std::wstring fileName) -> Graphics::Texture2D *
+{
+	return nullptr;
+}
+
+auto PixelWorldEngine::DataManager::UnRegisterTexture(Graphics::Texture2D * texture)
+{
 }

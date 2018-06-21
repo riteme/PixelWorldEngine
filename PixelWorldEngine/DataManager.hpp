@@ -2,6 +2,8 @@
 
 #include "pch.hpp"
 
+#include "Graphics.hpp"
+
 namespace PixelWorldEngine {
 
 	/**
@@ -50,6 +52,19 @@ namespace PixelWorldEngine {
 		 * @return 返回文件数据
 		 */
 		auto ReadFile(std::wstring fileName) -> FileData;
+
+		/**
+		 * @brief 读取纹理资源，并且注册，如果文件已经读取那么不会重复读取而是直接返回纹理
+		 * @param[in] fileName 纹理文件地址
+		 * @return 纹理文件
+		 */
+		auto RegisterTexture(std::wstring fileName) -> Graphics::Texture2D*;
+
+		/**
+		 * @brief 释放我们注册的纹理资源，如果一个纹理不需要使用的话建议释放以节约内存
+		 * @param[in] 纹理资源的指针，如果纹理资源并没有通过RegisterTexture读取的话，那么此函数无用
+		 */
+		auto UnRegisterTexture(Graphics::Texture2D* texture);
 
 		/**
 		 * @brief 写入文件

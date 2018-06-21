@@ -301,6 +301,19 @@ auto PixelWorldEngine::Application::ComputeViewPort(int windowWidth, int windowH
 	return Rectangle(offX, offY, offX + scaleWidth, offY + scaleHeight);
 }
 
+auto PixelWorldEngine::Application::ComputeMousePosition(Rectangle ViewPort, int resolutionWidth, int resolutionHeight, int x, int y) -> std::pair<int, int>
+{
+	float width = ViewPort.right - ViewPort.left;
+	float height = ViewPort.bottom - ViewPort.top;
+
+	std::pair<int, int> result;
+
+	result.first = (int)(resolutionWidth * (x - ViewPort.left) / width);
+	result.second = (int)(resolutionHeight * (y - ViewPort.top) / height);
+
+	return result;
+}
+
 PixelWorldEngine::Application::Application(const wchar_t * ApplicationName)
 {
 	applicationName = ApplicationName;
@@ -344,7 +357,7 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 	if (isWindowCreated == true) {
 
 #ifdef _WIN32
-		SetWindowText(hwnd, &windowName[0]);
+		SetWindowTextW(hwnd, &windowName[0]);
 
 		RECT rect;
 
@@ -394,7 +407,7 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 		AdjustWindowRect(&rect, WS_OVERLAPPEDWINDOW, FALSE);
 
-		hwnd = CreateWindow(&windowName[0], &windowName[0], WS_OVERLAPPEDWINDOW ^
+		hwnd = CreateWindowW(&windowName[0], &windowName[0], WS_OVERLAPPEDWINDOW ^
 			WS_SIZEBOX ^ WS_MAXIMIZEBOX, CW_USEDEFAULT, CW_USEDEFAULT,
 			rect.right - rect.left, rect.bottom - rect.top, nullptr, nullptr, hInstance, nullptr);
 
