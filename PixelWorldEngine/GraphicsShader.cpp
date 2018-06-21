@@ -34,8 +34,8 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 	for (size_t i = 0; i < result->GetBufferSize(); i++) 
 		compiledVertexShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 	
-	Utility::Dipose(result);
-	Utility::Dipose(error);
+	Utility::Dispose(result);
+	Utility::Dispose(error);
 
 	D3DCompile(&ShaderCode[0], ShaderCode.size(), nullptr, nullptr,
 		D3D_COMPILE_STANDARD_FILE_INCLUDE, PixelShaderFunction, "ps_5_0", flag, 0,
@@ -47,8 +47,8 @@ PixelWorldEngine::Graphics::GraphicsShader::GraphicsShader(Graphics* Graphics, s
 	for (size_t i = 0; i < result->GetBufferSize(); i++)
 		compiledPixelShaderCode.push_back(((byte*)result->GetBufferPointer())[i]);
 
-	Utility::Dipose(result);
-	Utility::Dipose(error);
+	Utility::Dispose(result);
+	Utility::Dispose(error);
 
 #endif // _WIN32
 }
@@ -87,8 +87,8 @@ auto PixelWorldEngine::Graphics::GraphicsShader::GetPixelShaderCode() -> std::ve
 PixelWorldEngine::Graphics::GraphicsShader::~GraphicsShader()
 {
 #ifdef _WIN32
-	Utility::Dipose(vertexShader);
-	Utility::Dipose(pixelShader);
+	Utility::Dispose(vertexShader);
+	Utility::Dispose(pixelShader);
 #endif // _WIN32
 
 }

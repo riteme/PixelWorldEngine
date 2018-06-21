@@ -64,7 +64,7 @@ void PixelWorldEngine::Graphics::Graphics::SetShader(GraphicsShader* shader)
 
 	auto vertexShaderCode = shader->GetVertexShaderCode();
 
-	Utility::Dipose(inputLayout);
+	Utility::Dispose(inputLayout);
 
 	device->CreateInputLayout(&elementDesc[0], 3, &vertexShaderCode[0], vertexShaderCode.size(), &inputLayout);
 
@@ -206,7 +206,7 @@ void PixelWorldEngine::Graphics::Graphics::SetFillMode(FillMode FillMode)
 	fillMode = FillMode;
 
 #ifdef _WIN32
-	Utility::Dipose(rasterizerState);
+	Utility::Dispose(rasterizerState);
 
 	rasterizerDesc.FillMode = (D3D11_FILL_MODE)fillMode;
 	
@@ -225,7 +225,7 @@ void PixelWorldEngine::Graphics::Graphics::SetBlendState(bool state)
 
 #ifdef _WIN32
 
-	Utility::Dipose(blendState);
+	Utility::Dispose(blendState);
 
 	blendDesc.RenderTarget[0].BlendEnable = blendEnable;
 
@@ -278,7 +278,7 @@ void PixelWorldEngine::Graphics::Graphics::DrawIndexed(int indexCount, int start
 PixelWorldEngine::Graphics::Graphics::~Graphics()
 {
 #ifdef _WIN32
-	Utility::Dipose(device);
-	Utility::Dipose(deviceContext);
+	Utility::Dispose(device);
+	Utility::Dispose(deviceContext);
 #endif // _WIN32
 }

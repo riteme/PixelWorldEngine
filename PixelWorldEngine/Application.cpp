@@ -437,9 +437,9 @@ void PixelWorldEngine::Application::MakeWindow(const wchar_t * WindowName, int W
 
 		factory->CreateSwapChain(graphics->device, &swapDesc, &swapChain);
 
-		Utility::Dipose(device);
-		Utility::Dipose(adapter);
-		Utility::Dipose(factory);
+		Utility::Dispose(device);
+		Utility::Dispose(adapter);
+		Utility::Dispose(factory);
 
 		self = this;
 #endif // _WIN32

@@ -31,7 +31,7 @@ PixelWorldEngine::Graphics::Buffer::Buffer(Graphics* Graphics, void * data, int 
 PixelWorldEngine::Graphics::Buffer::~Buffer() 
 {
 #ifdef _WIN32
-	Utility::Dipose(buffer);
+	Utility::Dispose(buffer);
 #endif // _WIN32
 
 }
